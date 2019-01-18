@@ -9,12 +9,21 @@
 import UIKit
 
 class ViewController: UIViewController {
+    private let canvas = CanvasView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.setupCanvas()
     }
-
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.canvas.adjustCanvas(frame:self.view.bounds)
+    }
+    
+    private func setupCanvas(){
+        self.view.backgroundColor = .white
+        self.view.addSubview(self.canvas)
+    }
 }
 
