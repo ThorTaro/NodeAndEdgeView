@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     private let canvas = CanvasView()
+    private var nodeMap = NodeMapModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +24,15 @@ class ViewController: UIViewController {
     
     private func setupCanvas(){
         self.view.backgroundColor = .white
+        self.canvas.nodeController = self
         self.view.addSubview(self.canvas)
+    }
+}
+
+extension ViewController:nodeControlDelegate{
+    func createNodeInView(view: CanvasView, position: CGPoint) {
+        let newNode = self.nodeMap.addNode(position: position)
+        view.createNodeView(node: newNode)
     }
 }
 

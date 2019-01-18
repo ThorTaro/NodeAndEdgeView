@@ -8,11 +8,17 @@
 
 import UIKit
 
+@objc protocol nodeControlDelegate{
+    func createNodeInView(view:CanvasView, position:CGPoint)
+}
+
 class CanvasView: UIScrollView{
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: 3000,
                                                           height: 3000))
+    
+    public weak var nodeController:nodeControlDelegate?
     
     override func didMoveToSuperview() {
         self.minimumZoomScale = 0.5
@@ -36,6 +42,19 @@ class CanvasView: UIScrollView{
         if recognizer.state == .began{
             print("node created")
         }
+        
+        if let unwrappedNodeController = self.nodeController, recognizer.state == .began{
+            let newNodePosition = CGPoint(x: recognizer.location(in: self.canvasContainer).x,
+                                          y: recognizer.location(in: self.canvasContainer).y)
+            unwrappedNodeController.createNodeInView(view: self, position: newNodePosition)
+        }
+    }
+    
+    public func createNodeView(node:NodeModel){
+        let newNodeView = NodeView(view: self, node: node)
+        self.canvasContainer.addSubview(newNodeView)
+        self.canvasContainer.bringSubviewToFront(newNodeView)
+        
     }
     
     private func nodeDeleted(){
@@ -43,9 +62,10 @@ class CanvasView: UIScrollView{
         // nodeDelegateで何かしている
     }
     
-    private func nodeMoved(){
+    public func nodeMoved(node:NodeModel){
         // ノードが動いた時の処理
         // nodeDelegateとエッジの描画のメソッドが書いてあったけどそれ以上はわからん
+        print("nodeView moved")
     }
 }
 
