@@ -35,17 +35,18 @@ class NodeView: UIView {
         if recongnizer.state == .began{
             self.previousPosition = recongnizer.location(in: self.superview)
             self.superview?.bringSubviewToFront(self)
-        }else if let unwrappedPreviousPanPosition = self.previousPosition, recongnizer.state == .changed{
+        }else if let unwrappedPreviousPanPosition = self.previousPosition,recongnizer.state == .changed{
             let movedPosition = recongnizer.location(in: self.superview)
             let deltaX = movedPosition.x - unwrappedPreviousPanPosition.x
             let deltaY = movedPosition.y - unwrappedPreviousPanPosition.y
             let newPosition = CGPoint(x: self.frame.origin.x + deltaX,
                                       y: self.frame.origin.y + deltaY)
-            self.frame.origin.x = newPosition.x
-            self.frame.origin.y = newPosition.y
-            self.previousPosition = movedPosition
-            self.node.setPosition(position: newPosition)
-            self.view.nodeMoved(node:node)
+            if self.ableToMove(newPosition: newPosition){
+                self.frame.origin.x = newPosition.x
+                self.frame.origin.y = newPosition.y
+                self.previousPosition = movedPosition
+                self.node.setPosition(position: newPosition)
+            }
         }
     }
     
@@ -73,6 +74,18 @@ class NodeView: UIView {
         self.backgroundColor = .orange
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
+    }
+    
+    private func ableToMove(newPosition:CGPoint) -> Bool{
+        let container = self.view.getCanvasLimitSize()
+        var movedViewFrame = self.frame
+        movedViewFrame.origin.x = newPosition.x
+        movedViewFrame.origin.y = newPosition.y
+        if movedViewFrame.minX >= container.minX && movedViewFrame.minY >= container.minY && movedViewFrame.maxX <= container.maxX && movedViewFrame.maxY <= container.maxY{
+            return true
+        }else{
+            return false
+        }
     }
 }
 
