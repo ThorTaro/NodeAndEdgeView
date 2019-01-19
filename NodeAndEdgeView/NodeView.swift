@@ -43,7 +43,7 @@ class NodeView: UIView {
                                       y: self.frame.origin.y + deltaY)
             self.frame.origin.x = newPosition.x
             self.frame.origin.y = newPosition.y
-            self.previousPosition = newPosition
+            self.previousPosition = movedPosition
             self.node.setPosition(position: newPosition)
             self.view.nodeMoved(node:node)
         }
