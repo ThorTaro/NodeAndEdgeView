@@ -15,13 +15,13 @@ import UIKit
 class CanvasView: UIScrollView{
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
-                                                          width: 3000,
-                                                          height: 3000))
-    
+                                                          width: UIScreen.main.bounds.width * 5,
+                                                          height: UIScreen.main.bounds.height * 5))
+    private var containerLimitSize = CGRect.zero
     public weak var nodeController:nodeControlDelegate?
     
     override func didMoveToSuperview() {
-        self.minimumZoomScale = 0.5
+        self.minimumZoomScale = UIScreen.main.bounds.height / self.canvasContainer.frame.height
         self.maximumZoomScale = 2.0
         self.backgroundColor = .black
         self.contentOffset = self.canvasContainer.center
@@ -29,12 +29,17 @@ class CanvasView: UIScrollView{
         self.addSubview(self.canvasContainer)
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
         self.addGestureRecognizer(longPress)
+        self.containerLimitSize = self.canvasContainer.bounds
     }
     
     public func adjustCanvas(frame:CGRect){
         self.frame = frame
         self.contentOffset = CGPoint(x: self.canvasContainer.center.x - frame.width / 2,
                                      y: self.canvasContainer.center.y - frame.height / 2)
+    }
+    
+    public func getCanvasLimitSize() -> CGRect{
+        return self.containerLimitSize
     }
     
     @objc func longPressHandler(recognizer: UILongPressGestureRecognizer){
@@ -66,6 +71,10 @@ class CanvasView: UIScrollView{
         // ノードが動いた時の処理
         // nodeDelegateとエッジの描画のメソッドが書いてあったけどそれ以上はわからん
         print("nodeView moved")
+    }
+    
+    public func getLimitSize() -> CGRect{
+        return self.canvasContainer.bounds
     }
 }
 
