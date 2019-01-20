@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc protocol nodeControlDelegate{
+protocol nodeControlDelegate:NSObjectProtocol{
     func createNodeInView(view:CanvasView, position:CGPoint)
 }
 
@@ -62,14 +62,9 @@ class CanvasView: UIScrollView{
     }
     
     public func nodeMoved(node:NodeModel){
-        // ノードが動いた時の処理
-        // nodeDelegateとエッジの描画のメソッドが書いてあったけどそれ以上はわからん
         print("nodeView moved")
     }
     
-    public func getLimitSize() -> CGRect{
-        return self.canvasContainer.bounds
-    }
 }
 
 extension CanvasView: UIScrollViewDelegate{
