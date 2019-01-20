@@ -43,11 +43,6 @@ class CanvasView: UIScrollView{
     }
     
     @objc func longPressHandler(recognizer: UILongPressGestureRecognizer){
-        // ノードを作る処理(nodeDelegateを後ほど解読する)
-        if recognizer.state == .began{
-            print("node created")
-        }
-        
         if let unwrappedNodeController = self.nodeController, recognizer.state == .began{
             let newNodePosition = CGPoint(x: recognizer.location(in: self.canvasContainer).x,
                                           y: recognizer.location(in: self.canvasContainer).y)
@@ -59,7 +54,6 @@ class CanvasView: UIScrollView{
         let newNodeView = NodeView(view: self, node: node)
         self.canvasContainer.addSubview(newNodeView)
         self.canvasContainer.bringSubviewToFront(newNodeView)
-        
     }
     
     private func nodeDeleted(){
