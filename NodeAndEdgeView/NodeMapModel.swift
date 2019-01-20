@@ -16,4 +16,8 @@ struct NodeMapModel {
         self.nodes.append(newNode)
         return newNode
     }
+    
+    public func getNodes() -> [NodeModel]{
+        return self.nodes
+    }
 }
