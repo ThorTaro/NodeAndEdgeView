@@ -74,6 +74,7 @@ class NodeView: UIView {
         self.backgroundColor = .orange
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
+        self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
     }
     
     private func ableToMove(newPosition:CGPoint) -> Bool{
@@ -86,6 +87,34 @@ class NodeView: UIView {
         }else{
             return false
         }
+    }
+    
+    private func adjustPosition(delta:CGPoint){
+        self.frame.origin.x -= delta.x
+        self.frame.origin.y -= delta.y
+        self.node.setPosition(position: CGPoint(x: self.frame.origin.x,
+                                                y: self.frame.origin.y))
+    }
+    
+    private func outsideContainer(createdFrame:CGRect) -> CGPoint{
+        let container = self.view.getCanvasLimitSize()
+        var deltaX:CGFloat = 0.0
+        var deltaY:CGFloat = 0.0
+        
+        if createdFrame.minY < container.minY{
+            deltaY = createdFrame.minX - container.minY
+        }
+        if createdFrame.minX < container.minX{
+            deltaX = createdFrame.minX - container.minX
+        }
+        if createdFrame.maxY > container.maxY{
+            deltaY = createdFrame.maxY - container.maxY
+        }
+        if createdFrame.maxX > container.maxX{
+            deltaX = createdFrame.maxX - container.maxX
+        }
+        
+        return CGPoint(x: deltaX, y: deltaY)
     }
 }
 
