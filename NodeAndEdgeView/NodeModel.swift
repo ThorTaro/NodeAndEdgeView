@@ -8,7 +8,13 @@
 
 import UIKit
 
-class NodeModel{
+class NodeModel:Equatable{
+    private let id = NSUUID()
+    
+    static func == (lhs: NodeModel, rhs: NodeModel) -> Bool {
+        return lhs.id.isEqual(rhs.id)
+    }
+    
     private var position:CGPoint
     
     init(position:CGPoint){
@@ -22,4 +28,5 @@ class NodeModel{
     public func setPosition(position:CGPoint){
         self.position = position
     }
+    
 }
