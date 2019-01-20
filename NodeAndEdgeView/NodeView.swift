@@ -52,7 +52,7 @@ class NodeView: UIView {
     
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
         if recognizer.state == .began{
-            print("nodeView longPressed")
+
         }
     }
     
@@ -115,6 +115,14 @@ class NodeView: UIView {
         }
         
         return CGPoint(x: deltaX, y: deltaY)
+    }
+    
+    private func changeNodeViewColor(){
+        if self.backgroundColor == .orange{
+            self.backgroundColor = .yellow
+        }else{
+            self.backgroundColor = .orange
+        }
     }
 }
 
