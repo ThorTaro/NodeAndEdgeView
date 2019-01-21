@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
+    private var edgeMap = EdgeMapModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
