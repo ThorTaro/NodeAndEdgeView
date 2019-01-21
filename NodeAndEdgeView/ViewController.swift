@@ -31,6 +31,13 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func isEdgeLoopedInView(view: CanvasView, childNode: NodeModel) -> Bool {
+        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(), unwrappedParentNode.getID() == childNode.getID(){
+            return true
+        }
+        return false
+    }
+    
     func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
