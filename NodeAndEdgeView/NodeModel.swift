@@ -12,7 +12,7 @@ class NodeModel:Equatable, Hashable{
     private let id = NSUUID()
     private var isSelected:Bool = false
     
-    var hashValue: Int{
+    internal var hashValue: Int{
         return self.id.hashValue
     }
     
@@ -36,6 +36,14 @@ class NodeModel:Equatable, Hashable{
     
     public func selected(bool:Bool){
         self.isSelected = bool
+    }
+    
+    public func getID() -> String{
+        return self.id.uuidString
+    }
+    
+    public func getStatus() -> Bool{
+        return self.isSelected
     }
     
 }
