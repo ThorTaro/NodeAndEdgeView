@@ -30,6 +30,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel) {
+        selectedNode.selected(bool: true)
+        view.isNodeSelectedMode(bool: true)
+    }
+    
     func createNodeInView(view: CanvasView, position: CGPoint) {
         let newNode = self.nodeMap.addNode(position: position)
         view.createNodeView(node: newNode)
