@@ -31,6 +31,15 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func createEdgeInView(view: CanvasView, childNode: NodeModel) {
+        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
+            self.edgeMap.addEdge(newEdge: EdgeModel(parentNode: unwrappedParentNode, childNode: childNode))
+            self.edgeMap.getAllEdges()
+        }else{
+            print("Edge creation failed")
+        }
+    }
+    
     func isEdgeLoopedInView(view: CanvasView, childNode: NodeModel) -> Bool {
         if let unwrappedParentNode = self.nodeMap.searchSelectedNode(), unwrappedParentNode.getID() == childNode.getID(){
             return true
