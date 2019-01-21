@@ -63,7 +63,7 @@ class NodeView: UIView {
         if !self.view.getSelectedModeStatus(){
             self.superview?.bringSubviewToFront(self)
         }else{
-            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView{
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView, !self.view.isLooped(childNode: touchedView.node){
                 print("Touched \(touchedView.node.getID())")
             }
         }
