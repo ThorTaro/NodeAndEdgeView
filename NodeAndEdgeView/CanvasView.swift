@@ -10,7 +10,7 @@ import UIKit
 
 protocol nodeControlDelegate:NSObjectProtocol{
     func createNodeInView(view:CanvasView, position:CGPoint)
-    func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel)
+    func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel?)
 }
 
 class CanvasView: UIScrollView{
@@ -20,7 +20,11 @@ class CanvasView: UIScrollView{
                                                           width: UIScreen.main.bounds.width * 5,
                                                           height: UIScreen.main.bounds.height * 5))
     private var containerLimitSize = CGRect.zero
-    private var nodeSelectedMode:Bool = false
+    private var nodeSelectedMode:Bool = false{
+        didSet{
+            print("nodeSelectedMode:\(self.nodeSelectedMode)")
+        }
+    }
     public weak var nodeController:nodeControlDelegate?
     
     override func didMoveToSuperview() {
@@ -46,7 +50,7 @@ class CanvasView: UIScrollView{
     }
     
     @objc func longPressHandler(recognizer: UILongPressGestureRecognizer){
-        if let unwrappedNodeController = self.nodeController, recognizer.state == .began{
+        if let unwrappedNodeController = self.nodeController,!self.getSelectedModeStatus(),recognizer.state == .began{
             let newNodePosition = CGPoint(x: recognizer.location(in: self.canvasContainer).x,
                                           y: recognizer.location(in: self.canvasContainer).y)
             unwrappedNodeController.createNodeInView(view: self, position: newNodePosition)
@@ -80,9 +84,19 @@ class CanvasView: UIScrollView{
         self.nodeSelectedMode = bool
     }
     
-    private func SelectNode(node:NodeModel){
-        if let unwrappedNodeView = self.NodeAndViewDict[node]{
-            unwrappedNodeView.changeNodeViewColor()
+    public func SelectNode(node:NodeModel){
+        if let unwrappedNodeViewDict = self.NodeAndViewDict[node]{
+            unwrappedNodeViewDict.changeNodeViewColor()
+        }
+    }
+    
+    public func getSelectedModeStatus() -> Bool{
+        return self.nodeSelectedMode
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.nodeSelectedInView(view: self, selectedNode: nil)
         }
     }
 }
