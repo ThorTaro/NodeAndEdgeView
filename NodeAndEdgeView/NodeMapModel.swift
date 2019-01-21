@@ -20,4 +20,20 @@ struct NodeMapModel {
     public func getNodes() -> [NodeModel]{
         return self.nodes
     }
+    
+    public func getNodesStatus(){
+        for node in nodes{
+            print("\(node.getID())")
+            let bool = node.getStatus()
+            print("Status:\(bool)")
+        }
+    }
+    
+    public func searchSelectedNode() -> NodeModel?{
+        var selectedNode:NodeModel?
+        for node in self.nodes where node.getStatus(){
+            selectedNode = node
+        }
+        return selectedNode
+    }
 }
