@@ -8,8 +8,13 @@
 
 import UIKit
 
-class NodeModel:Equatable{
+class NodeModel:Equatable, Hashable{
     private let id = NSUUID()
+    private var isSelected:Bool = false
+    
+    var hashValue: Int{
+        return self.id.hashValue
+    }
     
     static func == (lhs: NodeModel, rhs: NodeModel) -> Bool {
         return lhs.id.isEqual(rhs.id)
@@ -27,6 +32,10 @@ class NodeModel:Equatable{
     
     public func setPosition(position:CGPoint){
         self.position = position
+    }
+    
+    public func selected(bool:Bool){
+        self.isSelected = bool
     }
     
 }
