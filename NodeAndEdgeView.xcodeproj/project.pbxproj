@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5011728921F6006C00F9DD82 /* EdgeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011728821F6006C00F9DD82 /* EdgeModel.swift */; };
+		5011728B21F6027800F9DD82 /* EdgeMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011728A21F6027800F9DD82 /* EdgeMapModel.swift */; };
 		503E17CB21F2323200DD5EBA /* NodeMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CA21F2323200DD5EBA /* NodeMapModel.swift */; };
 		503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CC21F2326400DD5EBA /* NodeModel.swift */; };
 		503E17CF21F2327800DD5EBA /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CE21F2327800DD5EBA /* NodeView.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5011728821F6006C00F9DD82 /* EdgeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeModel.swift; sourceTree = "<group>"; };
+		5011728A21F6027800F9DD82 /* EdgeMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeMapModel.swift; sourceTree = "<group>"; };
 		503E17CA21F2323200DD5EBA /* NodeMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeMapModel.swift; sourceTree = "<group>"; };
 		503E17CC21F2326400DD5EBA /* NodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeModel.swift; sourceTree = "<group>"; };
 		503E17CE21F2327800DD5EBA /* NodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 				506443D321F1BADA0081994F /* ViewController.swift */,
 				503E17CA21F2323200DD5EBA /* NodeMapModel.swift */,
 				503E17CC21F2326400DD5EBA /* NodeModel.swift */,
+				5011728A21F6027800F9DD82 /* EdgeMapModel.swift */,
+				5011728821F6006C00F9DD82 /* EdgeModel.swift */,
 				503E17CE21F2327800DD5EBA /* NodeView.swift */,
 				506443E321F1BC350081994F /* CanvasView.swift */,
 				506443E521F1C1220081994F /* Container.swift */,
@@ -142,10 +148,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5011728921F6006C00F9DD82 /* EdgeModel.swift in Sources */,
 				506443D421F1BADA0081994F /* ViewController.swift in Sources */,
 				506443E621F1C1220081994F /* Container.swift in Sources */,
 				503E17CB21F2323200DD5EBA /* NodeMapModel.swift in Sources */,
 				506443D221F1BADA0081994F /* AppDelegate.swift in Sources */,
+				5011728B21F6027800F9DD82 /* EdgeMapModel.swift in Sources */,
 				506443E421F1BC350081994F /* CanvasView.swift in Sources */,
 				503E17CF21F2327800DD5EBA /* NodeView.swift in Sources */,
 				503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */,
