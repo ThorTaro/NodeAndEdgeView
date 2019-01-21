@@ -62,6 +62,10 @@ class NodeView: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !self.view.getSelectedModeStatus(){
             self.superview?.bringSubviewToFront(self)
+        }else{
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView{
+                print("Touched \(touchedView.node.getID())")
+            }
         }
     }
     
