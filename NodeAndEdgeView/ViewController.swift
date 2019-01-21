@@ -30,9 +30,19 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
-    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel) {
-        selectedNode.selected(bool: true)
-        view.isNodeSelectedMode(bool: true)
+    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
+        if let unwrappedSelectedNode = selectedNode{
+            unwrappedSelectedNode.selected(bool: true)
+            self.nodeMap.getNodesStatus()
+            view.isNodeSelectedMode(bool: true)
+        }else{
+            if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+               unwrappedSelectedNode.selected(bool: false)
+                self.nodeMap.getNodesStatus()
+                view.isNodeSelectedMode(bool: false)
+                view.SelectNode(node: unwrappedSelectedNode)
+            }
+        }
     }
     
     func createNodeInView(view: CanvasView, position: CGPoint) {
