@@ -9,9 +9,26 @@
 import UIKit
 
 struct EdgeMapModel {
-    private var edges = [EdgeModel]()
+    private var edges = [EdgeModel](){
+        didSet{
+            print("New edge appended")
+        }
+    }
     
     mutating func addEdge(newEdge:EdgeModel){
-        self.edges.append(newEdge)
+        if !self.edges.contains(newEdge){
+            self.edges.append(newEdge)
+        }else{
+            print("This edge is already created")
+        }
+    }
+    
+    public func getAllEdges(){
+        print(":::::::All Edge Status:::::::")
+        for edge in self.edges{
+            print("Parent ID:", edge.getStatus().parentNode?.getID() ?? "None")
+            print("Child ID:", edge.getStatus().childNode?.getID() ?? "Node")
+        }
+        print("::::::::::::::")
     }
 }
