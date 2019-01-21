@@ -11,6 +11,7 @@ import UIKit
 protocol nodeControlDelegate:NSObjectProtocol{
     func createNodeInView(view:CanvasView, position:CGPoint)
     func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel?)
+    func isEdgeLoopedInView(view:CanvasView, childNode:NodeModel) -> Bool
 }
 
 class CanvasView: UIScrollView{
@@ -97,6 +98,14 @@ class CanvasView: UIScrollView{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let unwrappedNodeController = self.nodeController{
             unwrappedNodeController.nodeSelectedInView(view: self, selectedNode: nil)
+        }
+    }
+    
+    public func isLooped(childNode:NodeModel) -> Bool{
+        if let unwrappedNodeController = self.nodeController{
+            return unwrappedNodeController.isEdgeLoopedInView(view: self, childNode: childNode)
+        }else{
+            return true
         }
     }
 }
