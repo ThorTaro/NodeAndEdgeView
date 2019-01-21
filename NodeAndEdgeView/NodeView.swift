@@ -54,7 +54,7 @@ class NodeView: UIView {
     
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
         if !self.view.getSelectedModeStatus(), recognizer.state == .began{
-            print("NodeView:\(self.node.getID()) LongPressed")
+            print("Node ID:\(self.node.getID()) selected")
             self.view.nodeSelected(selectedNode: self.node)
         }
     }
@@ -64,7 +64,7 @@ class NodeView: UIView {
             self.superview?.bringSubviewToFront(self)
         }else{
             if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView, !self.view.isLooped(childNode: touchedView.node){
-                print("Touched \(touchedView.node.getID())")
+                self.view.createEdge(childNode: touchedView.node)
             }
         }
     }
@@ -132,7 +132,6 @@ class NodeView: UIView {
         }else{
             self.backgroundColor = .orange
         }
-        print("\(self.node.getID()) chaged color")
     }
 }
 
