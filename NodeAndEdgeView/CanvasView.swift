@@ -12,6 +12,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func createNodeInView(view:CanvasView, position:CGPoint)
     func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel?)
     func isEdgeLoopedInView(view:CanvasView, childNode:NodeModel) -> Bool
+    func createEdgeInView(view:CanvasView, childNode:NodeModel)
 }
 
 class CanvasView: UIScrollView{
@@ -106,6 +107,12 @@ class CanvasView: UIScrollView{
             return unwrappedNodeController.isEdgeLoopedInView(view: self, childNode: childNode)
         }else{
             return true
+        }
+    }
+    
+    public func createEdge(childNode:NodeModel){
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.createEdgeInView(view: self, childNode: childNode)
         }
     }
 }
