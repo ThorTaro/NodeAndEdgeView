@@ -22,11 +22,13 @@ struct NodeMapModel {
     }
     
     public func getNodesStatus(){
+        print(":::::::All Node Status:::::::")
         for node in nodes{
-            print("\(node.getID())")
+            print("Node ID:\(node.getID())")
             let bool = node.getStatus()
             print("Status:\(bool)")
         }
+        print("::::::::::::::::::")
     }
     
     public func searchSelectedNode() -> NodeModel?{
