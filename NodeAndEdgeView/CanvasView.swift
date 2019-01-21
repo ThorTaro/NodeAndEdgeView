@@ -10,14 +10,17 @@ import UIKit
 
 protocol nodeControlDelegate:NSObjectProtocol{
     func createNodeInView(view:CanvasView, position:CGPoint)
+    func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel)
 }
 
 class CanvasView: UIScrollView{
+    private var NodeAndViewDict = [NodeModel:NodeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: UIScreen.main.bounds.width * 5,
                                                           height: UIScreen.main.bounds.height * 5))
     private var containerLimitSize = CGRect.zero
+    private var nodeSelectedMode:Bool = false
     public weak var nodeController:nodeControlDelegate?
     
     override func didMoveToSuperview() {
@@ -52,6 +55,7 @@ class CanvasView: UIScrollView{
     
     public func createNodeView(node:NodeModel){
         let newNodeView = NodeView(view: self, node: node)
+        self.NodeAndViewDict[node] = newNodeView
         self.canvasContainer.addSubview(newNodeView)
         self.canvasContainer.bringSubviewToFront(newNodeView)
     }
@@ -65,6 +69,22 @@ class CanvasView: UIScrollView{
         print("nodeView moved")
     }
     
+    public func nodeSelected(selectedNode:NodeModel){
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.nodeSelectedInView(view: self, selectedNode: selectedNode)
+            self.SelectNode(node: selectedNode)
+        }
+    }
+    
+    public func isNodeSelectedMode(bool:Bool){
+        self.nodeSelectedMode = bool
+    }
+    
+    private func SelectNode(node:NodeModel){
+        if let unwrappedNodeView = self.NodeAndViewDict[node]{
+            unwrappedNodeView.changeNodeViewColor()
+        }
+    }
 }
 
 extension CanvasView: UIScrollViewDelegate{
