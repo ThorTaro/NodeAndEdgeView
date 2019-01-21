@@ -8,7 +8,11 @@
 
 import UIKit
 
-class EdgeModel{
+class EdgeModel:Equatable{
+    static func == (lhs: EdgeModel, rhs: EdgeModel) -> Bool {
+        return (lhs.parentNode == rhs.parentNode && lhs.childNode == rhs.childNode) || (lhs.parentNode == rhs.childNode && lhs.childNode == rhs.parentNode)
+    }
+    
     private weak var parentNode:NodeModel?
     private weak var childNode:NodeModel?
     
@@ -23,5 +27,9 @@ class EdgeModel{
     
     public func setChildNode(childNode:NodeModel){
         self.childNode = childNode
+    }
+    
+    public func getStatus() -> (parentNode:NodeModel?,childNode:NodeModel?){
+        return (self.parentNode, self.childNode)
     }
 }
