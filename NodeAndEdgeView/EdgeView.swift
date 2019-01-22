@@ -11,6 +11,7 @@ import UIKit
 class EdgeView:CAShapeLayer{
     private weak var parentNodeView:NodeView?
     private weak var childNodeView:NodeView?
+    private var edge = UIBezierPath()
     
     init(parentNodeView:NodeView?, childNodeView:NodeView?) {
         self.parentNodeView = parentNodeView
@@ -29,12 +30,16 @@ class EdgeView:CAShapeLayer{
             return
         }
         
-        let edge = UIBezierPath()
-        edge.move(to: unwrappedParentNodeView.center)
-        edge.addLine(to: unwrappedChildNodeView.center)
-        edge.close()
+        self.edge.move(to: unwrappedParentNodeView.center)
+        self.edge.addLine(to: unwrappedChildNodeView.center)
+        self.edge.close()
         self.lineWidth = 10.0
-        self.strokeColor = UIColor.orange.cgColor
+        self.strokeColor = UIColor.lightGray.cgColor
         self.path = edge.cgPath
+    }
+    
+    public func redrawEdge(){
+        self.edge.removeAllPoints()
+        self.drawEdge()
     }
 }
