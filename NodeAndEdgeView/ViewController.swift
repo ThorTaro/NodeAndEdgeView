@@ -31,11 +31,16 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
+        view.moveEdgeView(edges: self.edgeMap.searchEdges(containedNode: movedNode))
+    }
+    
     func createEdgeInView(view: CanvasView, childNode: NodeModel) {
         if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
-            if self.edgeMap.addEdge(newEdge: EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)){
+            let newEdge = EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)
+            if self.edgeMap.addEdge(newEdge: newEdge){
                 self.edgeMap.getAllEdges()
-                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode)
+                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode, newEdge: newEdge)
             }
         }else{
             print("Edge creation failed")
