@@ -33,4 +33,16 @@ struct EdgeMapModel {
         }
         print("--------------")
     }
+    
+    public func searchEdges(containedNode:NodeModel) -> [EdgeModel]{
+        var resultEdges = [EdgeModel]()
+        for edge in self.edges{
+            if let unwrappedParentNode = edge.getNodePair().parentNode, unwrappedParentNode == containedNode{
+                resultEdges.append(edge)
+            }else if let unwrappedChildNode = edge.getNodePair().childNode, unwrappedChildNode == containedNode{
+                resultEdges.append(edge)
+            }
+        }
+        return resultEdges
+    }
 }
