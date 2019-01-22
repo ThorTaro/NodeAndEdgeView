@@ -15,20 +15,22 @@ struct EdgeMapModel {
         }
     }
     
-    mutating func addEdge(newEdge:EdgeModel){
+    mutating func addEdge(newEdge:EdgeModel) -> Bool{
         if !self.edges.contains(newEdge){
             self.edges.append(newEdge)
+            return true
         }else{
             print("This edge is already created")
+            return false
         }
     }
     
     public func getAllEdges(){
-        print(":::::::All Edge Status:::::::")
+        print("-------All Edge Status-------")
         for edge in self.edges{
             print("Parent ID:", edge.getStatus().parentNode?.getID() ?? "None")
             print("Child ID:", edge.getStatus().childNode?.getID() ?? "Node")
         }
-        print("::::::::::::::")
+        print("--------------")
     }
 }
