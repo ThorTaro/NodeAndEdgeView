@@ -33,8 +33,10 @@ class ViewController: UIViewController {
 extension ViewController:nodeControlDelegate{
     func createEdgeInView(view: CanvasView, childNode: NodeModel) {
         if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
-            self.edgeMap.addEdge(newEdge: EdgeModel(parentNode: unwrappedParentNode, childNode: childNode))
-            self.edgeMap.getAllEdges()
+            if self.edgeMap.addEdge(newEdge: EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)){
+                self.edgeMap.getAllEdges()
+                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode)
+            }
         }else{
             print("Edge creation failed")
         }
@@ -52,11 +54,13 @@ extension ViewController:nodeControlDelegate{
             unwrappedSelectedNode.selected(bool: true)
             self.nodeMap.getNodesStatus()
             view.isNodeSelectedMode(bool: true)
+            view.isEdgeCreationMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
                unwrappedSelectedNode.selected(bool: false)
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
+                view.isEdgeCreationMode(bool: false)
                 view.SelectNode(node: unwrappedSelectedNode)
             }
         }
