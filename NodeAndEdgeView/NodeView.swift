@@ -81,7 +81,7 @@ class NodeView: UIView {
                             y: self.frame.origin.y,
                             width: 200,
                             height: 50)
-        self.backgroundColor = .magenta
+        self.backgroundColor = .orange
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
         self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
@@ -128,10 +128,10 @@ class NodeView: UIView {
     }
     
     public func changeNodeViewColor(){
-        if self.backgroundColor == .magenta{
+        if self.backgroundColor == .orange{
             self.backgroundColor = .yellow
         }else{
-            self.backgroundColor = .magenta
+            self.backgroundColor = .orange
         }
     }
 }
