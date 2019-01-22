@@ -13,10 +13,12 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func nodeSelectedInView(view:CanvasView, selectedNode:NodeModel?)
     func isEdgeLoopedInView(view:CanvasView, childNode:NodeModel) -> Bool
     func createEdgeInView(view:CanvasView, childNode:NodeModel)
+    func nodeMovedInView(view:CanvasView, movedNode:NodeModel)
 }
 
 class CanvasView: UIScrollView{
     private var NodeAndViewDict = [NodeModel:NodeView]()
+    private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: UIScreen.main.bounds.width * 5,
@@ -77,7 +79,9 @@ class CanvasView: UIScrollView{
     }
     
     public func nodeMoved(node:NodeModel){
-        print("nodeView moved")
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.nodeMovedInView(view: self, movedNode: node)
+        }
     }
     
     public func nodeSelected(selectedNode:NodeModel){
@@ -129,9 +133,17 @@ class CanvasView: UIScrollView{
         return self.edgeCreationMode
     }
     
-    public func createEdgeView(parentNode:NodeModel, childNode:NodeModel){
+    public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
         let newEdgeView = EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
         self.canvasContainer.layer.insertSublayer(newEdgeView, at: 1)
+        self.NodeAndEdgeDict[newEdge] = newEdgeView
+    }
+    
+    public func moveEdgeView(edges:[EdgeModel]){
+        for edge in edges{
+            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+            unwrappedEdgeView.redrawEdge()
+        }
     }
 }
 
