@@ -47,6 +47,7 @@ class NodeView: UIView {
                     self.frame.origin.y = newPosition.y
                     self.previousPosition = movedPosition
                     self.node.setPosition(position: newPosition)
+                    self.view.nodeMoved(node: self.node)
                 }
             }
         }
@@ -80,7 +81,7 @@ class NodeView: UIView {
                             y: self.frame.origin.y,
                             width: 200,
                             height: 50)
-        self.backgroundColor = .orange
+        self.backgroundColor = .magenta
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
         self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
@@ -127,10 +128,10 @@ class NodeView: UIView {
     }
     
     public func changeNodeViewColor(){
-        if self.backgroundColor == .orange{
+        if self.backgroundColor == .magenta{
             self.backgroundColor = .yellow
         }else{
-            self.backgroundColor = .orange
+            self.backgroundColor = .magenta
         }
     }
 }
