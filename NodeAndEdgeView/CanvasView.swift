@@ -27,6 +27,11 @@ class CanvasView: UIScrollView{
             print("nodeSelectedMode:\(self.nodeSelectedMode)")
         }
     }
+    private var edgeCreationMode:Bool = false{
+        didSet{
+            print("edgeCreationMode:\(self.edgeCreationMode)")
+        }
+    }
     public weak var nodeController:nodeControlDelegate?
     
     override func didMoveToSuperview() {
@@ -111,9 +116,22 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdge(childNode:NodeModel){
-        if let unwrappedNodeController = self.nodeController{
+        if let unwrappedNodeController = self.nodeController, self.getEdgeCreationModeStatus(){
             unwrappedNodeController.createEdgeInView(view: self, childNode: childNode)
         }
+    }
+    
+    public func isEdgeCreationMode(bool:Bool){
+        self.edgeCreationMode = bool
+    }
+    
+    private func getEdgeCreationModeStatus() -> Bool{
+        return self.edgeCreationMode
+    }
+    
+    public func createEdgeView(parentNode:NodeModel, childNode:NodeModel){
+        let newEdgeView = EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
+        self.canvasContainer.layer.insertSublayer(newEdgeView, at: 1)
     }
 }
 
