@@ -33,7 +33,7 @@ class EdgeView:CAShapeLayer{
         edge.move(to: unwrappedParentNodeView.center)
         edge.addLine(to: unwrappedChildNodeView.center)
         edge.close()
-        self.lineWidth = 15.0
+        self.lineWidth = 10.0
         self.strokeColor = UIColor.orange.cgColor
         self.path = edge.cgPath
     }
