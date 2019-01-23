@@ -129,7 +129,7 @@ class NodeView: UIView {
     
     public func changeNodeViewColor(){
         if self.backgroundColor == .orange{
-            self.backgroundColor = .yellow
+            self.backgroundColor = .magenta
         }else{
             self.backgroundColor = .orange
         }
