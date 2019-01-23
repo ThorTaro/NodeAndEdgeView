@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
+    private var edgeMap = EdgeMapModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,46 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
+        view.moveEdgeView(edges: self.edgeMap.searchEdges(containedNode: movedNode))
+    }
+    
+    func createEdgeInView(view: CanvasView, childNode: NodeModel) {
+        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
+            let newEdge = EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)
+            if self.edgeMap.addEdge(newEdge: newEdge){
+                self.edgeMap.getAllEdges()
+                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode, newEdge: newEdge)
+            }
+        }else{
+            print("Edge creation failed")
+        }
+    }
+    
+    func isEdgeLoopedInView(view: CanvasView, childNode: NodeModel) -> Bool {
+        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(), unwrappedParentNode.getID() == childNode.getID(){
+            return true
+        }
+        return false
+    }
+    
+    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
+        if let unwrappedSelectedNode = selectedNode{
+            unwrappedSelectedNode.selected(bool: true)
+            self.nodeMap.getNodesStatus()
+            view.isNodeSelectedMode(bool: true)
+            view.isEdgeCreationMode(bool: true)
+        }else{
+            if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+               unwrappedSelectedNode.selected(bool: false)
+                self.nodeMap.getNodesStatus()
+                view.isNodeSelectedMode(bool: false)
+                view.isEdgeCreationMode(bool: false)
+                view.SelectNode(node: unwrappedSelectedNode)
+            }
+        }
+    }
+    
     func createNodeInView(view: CanvasView, position: CGPoint) {
         let newNode = self.nodeMap.addNode(position: position)
         view.createNodeView(node: newNode)

@@ -32,32 +32,42 @@ class NodeView: UIView {
     }
     
     @objc func panHandler(recongnizer:UIPanGestureRecognizer){
-        if recongnizer.state == .began{
-            self.previousPosition = recongnizer.location(in: self.superview)
-            self.superview?.bringSubviewToFront(self)
-        }else if let unwrappedPreviousPanPosition = self.previousPosition,recongnizer.state == .changed{
-            let movedPosition = recongnizer.location(in: self.superview)
-            let deltaX = movedPosition.x - unwrappedPreviousPanPosition.x
-            let deltaY = movedPosition.y - unwrappedPreviousPanPosition.y
-            let newPosition = CGPoint(x: self.frame.origin.x + deltaX,
-                                      y: self.frame.origin.y + deltaY)
-            if self.ableToMove(newPosition: newPosition){
-                self.frame.origin.x = newPosition.x
-                self.frame.origin.y = newPosition.y
-                self.previousPosition = movedPosition
-                self.node.setPosition(position: newPosition)
+        if !self.view.getSelectedModeStatus(){
+            if recongnizer.state == .began{
+                self.previousPosition = recongnizer.location(in: self.superview)
+                self.superview?.bringSubviewToFront(self)
+            }else if let unwrappedPreviousPanPosition = self.previousPosition,recongnizer.state == .changed{
+                let movedPosition = recongnizer.location(in: self.superview)
+                let deltaX = movedPosition.x - unwrappedPreviousPanPosition.x
+                let deltaY = movedPosition.y - unwrappedPreviousPanPosition.y
+                let newPosition = CGPoint(x: self.frame.origin.x + deltaX,
+                                          y: self.frame.origin.y + deltaY)
+                if self.ableToMove(newPosition: newPosition){
+                    self.frame.origin.x = newPosition.x
+                    self.frame.origin.y = newPosition.y
+                    self.previousPosition = movedPosition
+                    self.node.setPosition(position: newPosition)
+                    self.view.nodeMoved(node: self.node)
+                }
             }
         }
     }
     
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
-        if recognizer.state == .began{
-
+        if !self.view.getSelectedModeStatus(), recognizer.state == .began{
+            print("Node ID:\(self.node.getID()) selected")
+            self.view.nodeSelected(selectedNode: self.node)
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.superview?.bringSubviewToFront(self)
+        if !self.view.getSelectedModeStatus(){
+            self.superview?.bringSubviewToFront(self)
+        }else{
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView, !self.view.isLooped(childNode: touchedView.node){
+                self.view.createEdge(childNode: touchedView.node)
+            }
+        }
     }
     
     override func layoutSubviews() {
@@ -117,7 +127,7 @@ class NodeView: UIView {
         return CGPoint(x: deltaX, y: deltaY)
     }
     
-    private func changeNodeViewColor(){
+    public func changeNodeViewColor(){
         if self.backgroundColor == .orange{
             self.backgroundColor = .yellow
         }else{
