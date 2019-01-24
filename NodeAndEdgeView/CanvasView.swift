@@ -122,6 +122,7 @@ class CanvasView: UIScrollView{
     public func createEdge(childNode:NodeModel){
         if let unwrappedNodeController = self.nodeController, self.getEdgeCreationModeStatus(){
             unwrappedNodeController.createEdgeInView(view: self, childNode: childNode)
+            unwrappedNodeController.nodeSelectedInView(view: self, selectedNode: nil)
         }
     }
     
