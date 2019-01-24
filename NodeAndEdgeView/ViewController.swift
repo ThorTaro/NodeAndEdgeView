@@ -12,10 +12,12 @@ class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
     private var edgeMap = EdgeMapModel()
+    private var menu = SideMenuView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupCanvas()
+        self.setupMenu()
     }
     
     override func viewDidLayoutSubviews() {
@@ -27,6 +29,14 @@ class ViewController: UIViewController {
         self.view.backgroundColor = .white
         self.canvas.nodeController = self
         self.view.addSubview(self.canvas)
+    }
+    
+    private func setupMenu(){
+        self.menu = SideMenuView(frame: CGRect(x: self.view.bounds.width,
+                                               y: self.view.frame.origin.y,
+                                               width: self.view.bounds.width / 4,
+                                               height: self.view.bounds.height / 2))
+        self.view.addSubview(self.menu)
     }
 }
 
@@ -57,12 +67,14 @@ extension ViewController:nodeControlDelegate{
     func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
+            self.menu.showMenu()
             self.nodeMap.getNodesStatus()
             view.isNodeSelectedMode(bool: true)
             view.isEdgeCreationMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-               unwrappedSelectedNode.selected(bool: false)
+                unwrappedSelectedNode.selected(bool: false)
+                self.menu.hideMenu()
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
                 view.isEdgeCreationMode(bool: false)

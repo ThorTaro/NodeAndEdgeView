@@ -18,6 +18,7 @@
 		506443E421F1BC350081994F /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506443E321F1BC350081994F /* CanvasView.swift */; };
 		506443E621F1C1220081994F /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506443E521F1C1220081994F /* Container.swift */; };
 		507DE93421F7361100D3C2BE /* EdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507DE93321F7361100D3C2BE /* EdgeView.swift */; };
+		50B075D321FA246F008C1D0A /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B075D221FA246F008C1D0A /* SideMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		506443E321F1BC350081994F /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		506443E521F1C1220081994F /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
 		507DE93321F7361100D3C2BE /* EdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeView.swift; sourceTree = "<group>"; };
+		50B075D221FA246F008C1D0A /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 			children = (
 				506443D121F1BADA0081994F /* AppDelegate.swift */,
 				506443D321F1BADA0081994F /* ViewController.swift */,
+				50B075D221FA246F008C1D0A /* SideMenuView.swift */,
 				503E17CA21F2323200DD5EBA /* NodeMapModel.swift */,
 				503E17CC21F2326400DD5EBA /* NodeModel.swift */,
 				503E17CE21F2327800DD5EBA /* NodeView.swift */,
@@ -161,6 +164,7 @@
 				507DE93421F7361100D3C2BE /* EdgeView.swift in Sources */,
 				503E17CF21F2327800DD5EBA /* NodeView.swift in Sources */,
 				503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */,
+				50B075D321FA246F008C1D0A /* SideMenuView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
