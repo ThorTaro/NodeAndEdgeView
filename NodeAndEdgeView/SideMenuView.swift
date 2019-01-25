@@ -9,13 +9,14 @@
 import UIKit
 
 class SideMenuView:UIView{
-    private let itemSet:[String] = ["Text","Edge","Delete"]
+    private let itemSet:[String] = ["Text Edit","Edge Create","Delete"]
     
     private var tableView:UITableView = {
         let table = UITableView()
             table.backgroundColor = .clear
             table.tableFooterView = UIView(frame: .zero)
-            table.separatorInset = UIEdgeInsets.zero
+//            table.separatorInset = UIEdgeInsets.zero
+            table.separatorStyle = .none
             table.isScrollEnabled = false
         return table
     }()
@@ -42,9 +43,10 @@ class SideMenuView:UIView{
     private func setupItem(){
         self.tableView.frame.size = CGSize(width: self.bounds.width, height: self.bounds.height / 10 * 9)
         self.tableView.frame.origin = CGPoint(x: self.bounds.origin.x, y: self.bounds.width / 8)
+        self.tableView.rowHeight = (self.bounds.height - self.bounds.width / 8 * 2) / 3
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellID")
+        self.tableView.register(MenuItemCell.self, forCellReuseIdentifier: "cellID")
         self.addSubview(tableView)
     }
     
@@ -75,12 +77,15 @@ extension SideMenuView:UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
-            cell.layoutMargins = UIEdgeInsets.zero
-            cell.preservesSuperviewLayoutMargins = false
-            cell.backgroundColor = .clear
-            cell.textLabel?.textColor = .white
-            cell.textLabel?.text = self.itemSet[indexPath.row]
+        let cell:MenuItemCell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! MenuItemCell
+        if indexPath.row == 0{
+            cell.setImage(name: "TextEditIcon")
+        }else if indexPath.row == 1{
+            cell.setImage(name: "EdgeCreationIcon")
+        }else{
+            cell.setImage(name: "DeleteIcon")
+        }
+        cell.setItem(name: self.itemSet[indexPath.row])
         return cell
     }
 }
