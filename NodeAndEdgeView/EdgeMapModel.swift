@@ -25,6 +25,14 @@ struct EdgeMapModel {
         }
     }
     
+    mutating func deleteEdge(edges:[EdgeModel]){
+        for edge in edges{
+            if let i = self.edges.index(of:edge){
+                self.edges.remove(at: i)
+            }
+        }
+    }
+    
     public func getAllEdges(){
         print("-------All Edge Status-------")
         for edge in self.edges{

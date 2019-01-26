@@ -85,6 +85,15 @@ class CanvasView: UIScrollView{
         }
     }
     
+    public func deleteEdgeView(edges:[EdgeModel]){
+        for edge in edges{
+            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+            unwrappedEdgeView.removeEdgeView()
+            self.NodeAndEdgeDict.removeValue(forKey: edge)
+        }
+        
+    }
+    
     public func nodeMoved(node:NodeModel){
         if let unwrappedNodeController = self.nodeController{
             unwrappedNodeController.nodeMovedInView(view: self, movedNode: node)

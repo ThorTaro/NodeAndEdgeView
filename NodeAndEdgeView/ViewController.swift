@@ -48,9 +48,13 @@ extension ViewController:nodeControlDelegate{
             self.menu.hideMenu()
             view.isEdgeCreationMode(bool: false)
             view.isNodeSelectedMode(bool: false)
+            let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
+            view.deleteEdgeView(edges: relatedEdges)
+            self.edgeMap.deleteEdge(edges: relatedEdges)
         }
         self.nodeMap.deleteNode(node: node)
         self.nodeMap.getNodesStatus()
+        self.edgeMap.getAllEdges()
     }
     
     func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
