@@ -29,7 +29,7 @@ struct EdgeMapModel {
         print("-------All Edge Status-------")
         for edge in self.edges{
             print("Parent ID:", edge.getStatus().parentNode?.getID() ?? "None")
-            print("Child ID:", edge.getStatus().childNode?.getID() ?? "Node")
+            print("Child ID:", edge.getStatus().childNode?.getID() ?? "None")
         }
         print("--------------")
     }

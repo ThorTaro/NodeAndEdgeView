@@ -134,5 +134,9 @@ class NodeView: UIView {
             self.backgroundColor = .orange
         }
     }
+    
+    public func removeNodeView(){
+        self.removeFromSuperview()
+    }
 }
 
