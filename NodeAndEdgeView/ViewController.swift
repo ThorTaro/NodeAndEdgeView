@@ -36,6 +36,7 @@ class ViewController: UIViewController {
                                                y: self.view.frame.origin.y,
                                                width: self.view.bounds.width / 4,
                                                height: self.view.bounds.height / 2))
+        self.menu.sideMenuController = self
         self.view.addSubview(self.menu)
     }
 }
@@ -68,9 +69,8 @@ extension ViewController:nodeControlDelegate{
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
             self.menu.showMenu()
-            self.nodeMap.getNodesStatus()
+            self.nodeMap.getNodesStatus() // Print Debug
             view.isNodeSelectedMode(bool: true)
-            view.isEdgeCreationMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
                 unwrappedSelectedNode.selected(bool: false)
@@ -89,3 +89,8 @@ extension ViewController:nodeControlDelegate{
     }
 }
 
+extension ViewController:sideMenuDelegate{
+    func tappedCreateEdge() {
+        self.canvas.isEdgeCreationMode(bool: true)
+    }
+}

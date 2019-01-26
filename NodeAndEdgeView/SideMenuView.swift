@@ -8,18 +8,23 @@
 
 import UIKit
 
+protocol sideMenuDelegate:NSObjectProtocol{
+    func tappedCreateEdge()
+}
+
 class SideMenuView:UIView{
-    private let itemSet:[String] = ["Text Edit","Edge Create","Delete"]
+    private let itemSet:[String] = ["Text Edit","Create Edge","Delete"]
     
     private var tableView:UITableView = {
         let table = UITableView()
             table.backgroundColor = .clear
             table.tableFooterView = UIView(frame: .zero)
-//            table.separatorInset = UIEdgeInsets.zero
             table.separatorStyle = .none
             table.isScrollEnabled = false
         return table
     }()
+    
+    public weak var sideMenuController:sideMenuDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,6 +65,9 @@ class SideMenuView:UIView{
     public func hideMenu(){
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.origin.x += self.frame.width
+            if let indexPathForSelectedRow = self.tableView.indexPathForSelectedRow {
+                self.tableView.deselectRow(at: indexPathForSelectedRow, animated: true)
+            }
             self.setNeedsLayout()
         })
     }
@@ -67,7 +75,16 @@ class SideMenuView:UIView{
 
 extension SideMenuView:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.row == 0{
+            print(self.itemSet[indexPath.row])
+        }else if indexPath.row == 1{
+            print(self.itemSet[indexPath.row])
+            if let unwrappedSideMenuController = self.sideMenuController{
+                unwrappedSideMenuController.tappedCreateEdge()
+            }
+        }else{
+            print(self.itemSet[indexPath.row])
+        }
     }
 }
 
