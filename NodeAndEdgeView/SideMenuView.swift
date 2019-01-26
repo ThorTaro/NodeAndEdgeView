@@ -10,6 +10,7 @@ import UIKit
 
 protocol sideMenuDelegate:NSObjectProtocol{
     func tappedCreateEdge()
+    func tappedDeletaNode()
 }
 
 class SideMenuView:UIView{
@@ -78,12 +79,15 @@ extension SideMenuView:UITableViewDelegate{
         if indexPath.row == 0{
             print(self.itemSet[indexPath.row])
         }else if indexPath.row == 1{
-            print(self.itemSet[indexPath.row])
             if let unwrappedSideMenuController = self.sideMenuController{
                 unwrappedSideMenuController.tappedCreateEdge()
             }
+        }else if indexPath.row == 2{
+            if let unwrappedSideMenuController = self.sideMenuController{
+                unwrappedSideMenuController.tappedDeletaNode()
+            }
         }else{
-            print(self.itemSet[indexPath.row])
+            print("Out of range")
         }
     }
 }
