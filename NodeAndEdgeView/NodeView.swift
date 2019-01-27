@@ -20,6 +20,9 @@ class NodeView: UIView {
         return label
     }()
     
+    private let defaultWidth:CGFloat = 200.0
+    private let defaultHeight:CGFloat = 50.0
+    
     required init(view:CanvasView, node:NodeModel) {
         self.view = view
         self.node = node
@@ -80,14 +83,12 @@ class NodeView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.setUpView()
-        
+        print("setup")
     }
     
     private func setUpView(){
-        self.frame = CGRect(x: self.frame.origin.x,
-                            y: self.frame.origin.y,
-                            width: 200,
-                            height: 50)
+        self.frame.origin = CGPoint(x: self.frame.origin.x, y: self.frame.origin.y)
+        self.frame.size = CGSize(width: self.defaultWidth, height: self.defaultHeight)
         self.backgroundColor = .orange
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
@@ -151,6 +152,34 @@ class NodeView: UIView {
     
     public func setText(text:String){
         self.textLabel.text = text
+        print(self.textLabel.frame.width)
+        print(text.getWidthOfString(usingFont: self.textLabel.font))
+        // TODO
+        // 渡されたtextの長さに応じてNodeViewの幅を変更する
+        // あんまり小さくなるとダサいので，幅の最小値は決めておいて，それより小さくはならないようにする
+        // 可変にすると，canvasの外にはみ出てしまってジェスチャが死んでしまうので，はみ出ていたら強制的に中に押し込むようにする
+        // 普通に使ってたらありえないんだけど，理論上ありえるということで，無限にviewの幅を伸ばすと絶対にはみ出るので，最大値も決めておきたい
+        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultHeight
+        if adjustedWidth <= self.defaultWidth{
+            let newFrame = CGRect(x: self.frame.origin.x,
+                                  y: self.frame.origin.y,
+                                  width: self.defaultWidth,
+                                  height: self.defaultHeight)
+            self.frame = newFrame
+        }else if adjustedWidth >  self.defaultWidth{
+            let newFrame = CGRect(x: self.frame.origin.x,
+                                  y: self.frame.origin.y,
+                                  width: 500,
+                                  height: self.defaultHeight)
+            self.frame = newFrame
+        }
     }
 }
 
+extension String{
+    public func getWidthOfString(usingFont font: UIFont) -> CGFloat{
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = self.size(withAttributes: attributes)
+        return size.width
+    }
+}

@@ -112,10 +112,6 @@ extension ViewController:sideMenuDelegate{
                 return
             }
             
-            guard !text.isEmpty else{
-                return
-            }
-            
             guard let weakself = self else{
                 return
             }
