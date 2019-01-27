@@ -11,9 +11,6 @@ import UIKit
 class EdgeModel:Equatable, Hashable{
     static func == (lhs: EdgeModel, rhs: EdgeModel) -> Bool {
         return (lhs.parentNode == rhs.parentNode && lhs.childNode == rhs.childNode) || (lhs.parentNode == rhs.childNode && lhs.childNode == rhs.parentNode)
-        // CAUTION
-        // 単純にEdgeの重複を避けるだけならこれでもいいんだけど，多分これだとparentNodeと一緒にchildNodeも連動して消すって機能は実現しにくいんじゃないかなと思う
-        // parentNodeを中心側から(?)って決めておかないと意味わかんないことになると思う
     }
     
     private weak var parentNode:NodeModel?

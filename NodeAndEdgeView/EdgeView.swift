@@ -42,4 +42,8 @@ class EdgeView:CAShapeLayer{
         self.edge.removeAllPoints()
         self.drawEdge()
     }
+    
+    public func removeEdgeView(){
+        self.removeFromSuperlayer()
+    }
 }

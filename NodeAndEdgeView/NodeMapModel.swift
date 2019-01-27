@@ -17,6 +17,13 @@ struct NodeMapModel {
         return newNode
     }
     
+    mutating func deleteNode(node:NodeModel){
+        if let i = self.nodes.index(of:node){
+            self.nodes.remove(at: i)
+            print("ID:\(node.getID()) deleted")
+        }
+    }
+    
     public func getNodes() -> [NodeModel]{
         return self.nodes
     }

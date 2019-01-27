@@ -12,10 +12,12 @@ class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
     private var edgeMap = EdgeMapModel()
+    private var menu = SideMenuView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupCanvas()
+        self.setupMenu()
     }
     
     override func viewDidLayoutSubviews() {
@@ -28,9 +30,33 @@ class ViewController: UIViewController {
         self.canvas.nodeController = self
         self.view.addSubview(self.canvas)
     }
+    
+    private func setupMenu(){
+        self.menu = SideMenuView(frame: CGRect(x: self.view.bounds.width,
+                                               y: self.view.frame.origin.y,
+                                               width: self.view.bounds.width / 4,
+                                               height: self.view.bounds.height / 2))
+        self.menu.sideMenuController = self
+        self.view.addSubview(self.menu)
+    }
 }
 
 extension ViewController:nodeControlDelegate{
+    func nodeDeletedInView(view: CanvasView, node: NodeModel) {
+        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+            unwrappedSelectedNode.selected(bool: false)
+            self.menu.hideMenu()
+            view.isEdgeCreationMode(bool: false)
+            view.isNodeSelectedMode(bool: false)
+            let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
+            view.deleteEdgeView(edges: relatedEdges)
+            self.edgeMap.deleteEdge(edges: relatedEdges)
+        }
+        self.nodeMap.deleteNode(node: node)
+        self.nodeMap.getNodesStatus()
+        self.edgeMap.getAllEdges()
+    }
+    
     func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
         view.moveEdgeView(edges: self.edgeMap.searchEdges(containedNode: movedNode))
     }
@@ -57,12 +83,13 @@ extension ViewController:nodeControlDelegate{
     func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
-            self.nodeMap.getNodesStatus()
+            self.menu.showMenu()
+            self.nodeMap.getNodesStatus() // Print Debug
             view.isNodeSelectedMode(bool: true)
-            view.isEdgeCreationMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-               unwrappedSelectedNode.selected(bool: false)
+                unwrappedSelectedNode.selected(bool: false)
+                self.menu.hideMenu()
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
                 view.isEdgeCreationMode(bool: false)
@@ -77,3 +104,14 @@ extension ViewController:nodeControlDelegate{
     }
 }
 
+extension ViewController:sideMenuDelegate{
+    func tappedDeletaNode() {
+        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+            self.canvas.deleteNodeView(node:unwrappedSelectedNode)
+        }
+    }
+    
+    func tappedCreateEdge() {
+        self.canvas.isEdgeCreationMode(bool: true)
+    }
+}

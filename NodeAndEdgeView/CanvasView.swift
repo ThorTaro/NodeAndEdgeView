@@ -14,6 +14,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func isEdgeLoopedInView(view:CanvasView, childNode:NodeModel) -> Bool
     func createEdgeInView(view:CanvasView, childNode:NodeModel)
     func nodeMovedInView(view:CanvasView, movedNode:NodeModel)
+    func nodeDeletedInView(view:CanvasView ,node:NodeModel)
 }
 
 class CanvasView: UIScrollView{
@@ -73,9 +74,24 @@ class CanvasView: UIScrollView{
         self.canvasContainer.bringSubviewToFront(newNodeView)
     }
     
-    private func nodeDeleted(){
-        // ノードを削除した時の処理
-        // nodeDelegateで何かしている
+    public func deleteNodeView(node:NodeModel){
+        if let unwrappedNodeView = self.NodeAndViewDict[node]{
+            unwrappedNodeView.removeNodeView()
+            self.NodeAndViewDict.removeValue(forKey: node)
+        }
+        
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.nodeDeletedInView(view:self, node: node)
+        }
+    }
+    
+    public func deleteEdgeView(edges:[EdgeModel]){
+        for edge in edges{
+            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+            unwrappedEdgeView.removeEdgeView()
+            self.NodeAndEdgeDict.removeValue(forKey: edge)
+        }
+        
     }
     
     public func nodeMoved(node:NodeModel){
