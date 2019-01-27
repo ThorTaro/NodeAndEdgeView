@@ -12,6 +12,13 @@ class NodeView: UIView {
     unowned var view:CanvasView
     unowned var node:NodeModel
     private var previousPosition:CGPoint?
+    private var textLabel:UILabel = {
+        let label = UILabel()
+            label.backgroundColor = .clear
+            label.textColor = .black
+            label.textAlignment = .center
+        return label
+    }()
     
     required init(view:CanvasView, node:NodeModel) {
         self.view = view
@@ -85,6 +92,9 @@ class NodeView: UIView {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
         self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
+        self.textLabel.frame = self.bounds
+        self.textLabel.font = UIFont.systemFont(ofSize: self.textLabel.frame.height / 2)
+        self.addSubview(self.textLabel)
     }
     
     private func ableToMove(newPosition:CGPoint) -> Bool{
@@ -137,6 +147,10 @@ class NodeView: UIView {
     
     public func removeNodeView(){
         self.removeFromSuperview()
+    }
+    
+    public func setText(text:String){
+        self.textLabel.text = text
     }
 }
 

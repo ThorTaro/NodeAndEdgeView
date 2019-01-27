@@ -9,6 +9,7 @@
 import UIKit
 
 protocol sideMenuDelegate:NSObjectProtocol{
+    func tappedTextEdit()
     func tappedCreateEdge()
     func tappedDeletaNode()
 }
@@ -77,7 +78,9 @@ class SideMenuView:UIView{
 extension SideMenuView:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0{
-            print(self.itemSet[indexPath.row])
+            if let unwrappedMenuController = self.sideMenuController{
+                unwrappedMenuController.tappedTextEdit()
+            }
         }else if indexPath.row == 1{
             if let unwrappedSideMenuController = self.sideMenuController{
                 unwrappedSideMenuController.tappedCreateEdge()

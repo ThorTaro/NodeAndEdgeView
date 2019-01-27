@@ -105,6 +105,42 @@ extension ViewController:nodeControlDelegate{
 }
 
 extension ViewController:sideMenuDelegate{
+    func tappedTextEdit() {
+        let AlertController = UIAlertController(title: "Text", message: "", preferredStyle: .alert)
+        let OKAlertAction = UIAlertAction(title: "OK", style: .default, handler:{[weak AlertController, weak self](action) -> Void in
+            guard let text = AlertController?.textFields?.first?.text else{
+                return
+            }
+            
+            guard !text.isEmpty else{
+                return
+            }
+            
+            guard let weakself = self else{
+                return
+            }
+            
+            guard let unwrappedSelectedNode = weakself.nodeMap.searchSelectedNode() else{
+                return
+            }
+            weakself.canvas.setTextInNodeView(node: unwrappedSelectedNode, text: text)
+            weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
+        })
+        let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self](action) -> Void in
+            guard let weakself = self else{
+                return
+            }
+            weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
+        })
+        AlertController.addTextField{textField in
+            textField.placeholder = "Text"
+            textField.keyboardAppearance  = .dark
+        }
+        AlertController.addAction(OKAlertAction)
+        AlertController.addAction(CancelAction)
+        self.present(AlertController, animated: true, completion: nil)
+    }
+    
     func tappedDeletaNode() {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
             self.canvas.deleteNodeView(node:unwrappedSelectedNode)
