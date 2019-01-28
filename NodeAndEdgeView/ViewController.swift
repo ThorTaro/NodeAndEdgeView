@@ -155,7 +155,9 @@ extension ViewController:sideMenuDelegate{
     }
     
     func tappedDeletaNode() {
-        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(), !self.canvas.isAncestor(node: unwrappedSelectedNode){
+            // TODO
+            // AncestorをdeleteしようとしていたらAlertを表示するようにしたい
             self.canvas.deleteNodeView(node:unwrappedSelectedNode)
         }
     }

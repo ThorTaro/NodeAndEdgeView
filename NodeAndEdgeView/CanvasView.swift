@@ -18,7 +18,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
 }
 
 class CanvasView: UIScrollView{
-    private var NodeAndViewDict = [NodeModel:DescendantNodeView]()
+    private var NodeAndViewDict = [NodeModel:AbstractNodeView]()
     private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
@@ -186,6 +186,14 @@ class CanvasView: UIScrollView{
         self.NodeAndViewDict[node] = newNodeView
         self.canvasContainer.addSubview(newNodeView)
         self.canvasContainer.bringSubviewToFront(newNodeView)
+    }
+    
+    public func isAncestor(node:NodeModel) -> Bool{
+        guard let unwrappedNodeView = self.NodeAndViewDict[node] else {
+            return false
+        }
+        
+        return type(of: unwrappedNodeView) === AncestorNodeView.self
     }
 }
 
