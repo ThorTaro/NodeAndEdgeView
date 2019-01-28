@@ -70,7 +70,7 @@ class NodeView: UIView {
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
         if !self.view.getSelectedModeStatus(), recognizer.state == .began{
             print("Node ID:\(self.node.getID()) selected")
-            self.view.nodeSelected(selectedNode: self.node)
+            self.view.nodeSelected(selectedNode: self.node, isSelected: true)
         }
     }
     
@@ -141,8 +141,8 @@ class NodeView: UIView {
         return CGPoint(x: deltaX, y: deltaY)
     }
     
-    public func changeNodeViewColor(){
-        if self.backgroundColor == .orange{
+    public func changeNodeViewColor(isSelected:Bool){
+        if isSelected == true{
             self.backgroundColor = .yellow
         }else{
             self.backgroundColor = .orange
@@ -166,6 +166,10 @@ class NodeView: UIView {
             self.currentWidth = self.maxWidth
         }
         self.setNeedsLayout()
+    }
+    
+    public func getDefaultCenter() -> CGPoint{
+        return CGPoint(x: self.defaultWidth/2, y: self.defaultHeight/2)
     }
 }
 

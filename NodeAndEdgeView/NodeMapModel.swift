@@ -46,4 +46,8 @@ struct NodeMapModel {
         }
         return selectedNode
     }
+    
+    public func getAncestor() -> NodeModel?{
+        return self.nodes.first
+    }
 }
