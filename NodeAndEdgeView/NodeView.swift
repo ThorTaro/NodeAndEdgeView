@@ -31,11 +31,9 @@ class NodeView: UIView {
         self.node = node
         super.init(frame: CGRect(origin: self.node.getPosition() , size: CGSize.zero))
         self.currentWidth = self.defaultWidth
-        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
-        self.addGestureRecognizer(pan)
-        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
+        self.addGestureRecognizer(pan)
         self.addGestureRecognizer(longPress)
         
         self.setNeedsLayout()
@@ -89,7 +87,7 @@ class NodeView: UIView {
         self.setUpView()
     }
     
-    private func setUpView(){
+    open func setUpView(){
         self.frame.origin = CGPoint(x: self.frame.origin.x, y: self.frame.origin.y)
         self.frame.size = CGSize(width: self.currentWidth, height: self.defaultHeight)
         self.backgroundColor = .orange

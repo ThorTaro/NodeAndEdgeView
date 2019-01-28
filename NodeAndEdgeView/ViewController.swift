@@ -46,7 +46,8 @@ class ViewController: UIViewController {
     }
     
     private func setAncestor(){
-        self.createNodeInView(view: self.canvas, position: CGPoint.zero)
+        let newAncestorNode = self.nodeMap.addNode(position: CGPoint.zero)
+        self.canvas.createAncestorNodeView(node: newAncestorNode)
         guard let ancestorNodeModel = self.nodeMap.getAncestor() else {
             return
         }

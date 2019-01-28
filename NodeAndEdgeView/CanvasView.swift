@@ -180,6 +180,13 @@ class CanvasView: UIScrollView{
                                                 y: self.containerLimitSize.height/2 - ancestorNodeView.getDefaultCenter().y)
         unwrappedNodeController.nodeMovedInView(view: self, movedNode: node)
     }
+    
+    public func createAncestorNodeView(node:NodeModel){
+        let newNodeView = AncestorNodeView(view: self, node: node)
+        self.NodeAndViewDict[node] = newNodeView
+        self.canvasContainer.addSubview(newNodeView)
+        self.canvasContainer.bringSubviewToFront(newNodeView)
+    }
 }
 
 extension CanvasView: UIScrollViewDelegate{
