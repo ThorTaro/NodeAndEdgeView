@@ -12,11 +12,25 @@ class NodeView: UIView {
     unowned var view:CanvasView
     unowned var node:NodeModel
     private var previousPosition:CGPoint?
+    private var textLabel:UILabel = {
+        let label = UILabel()
+            label.backgroundColor = .clear
+            label.textColor = .black
+            label.textAlignment = .center
+        return label
+    }()
+    
+    private let defaultWidth:CGFloat = 200.0
+    private let defaultHeight:CGFloat = 50.0
+    private let maxWidth:CGFloat = 800.0
+    private var currentWidth:CGFloat = 0.0
+    private var currentText = String()
     
     required init(view:CanvasView, node:NodeModel) {
         self.view = view
         self.node = node
         super.init(frame: CGRect(origin: self.node.getPosition() , size: CGSize.zero))
+        self.currentWidth = self.defaultWidth
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
         self.addGestureRecognizer(pan)
@@ -73,18 +87,18 @@ class NodeView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         self.setUpView()
-        
     }
     
     private func setUpView(){
-        self.frame = CGRect(x: self.frame.origin.x,
-                            y: self.frame.origin.y,
-                            width: 200,
-                            height: 50)
+        self.frame.origin = CGPoint(x: self.frame.origin.x, y: self.frame.origin.y)
+        self.frame.size = CGSize(width: self.currentWidth, height: self.defaultHeight)
         self.backgroundColor = .orange
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.height/2
         self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
+        self.textLabel.frame = self.bounds
+        self.textLabel.font = UIFont.systemFont(ofSize: self.textLabel.frame.height / 2)
+        self.addSubview(self.textLabel)
     }
     
     private func ableToMove(newPosition:CGPoint) -> Bool{
@@ -138,5 +152,27 @@ class NodeView: UIView {
     public func removeNodeView(){
         self.removeFromSuperview()
     }
+    
+    public func setText(text:String){
+        self.currentText = text
+        self.textLabel.text = self.currentText
+        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultHeight
+        
+        if adjustedWidth <= self.defaultWidth{
+            self.currentWidth = self.defaultWidth
+        }else if adjustedWidth >  self.defaultWidth, adjustedWidth <= self.maxWidth{
+            self.currentWidth = adjustedWidth
+        }else if adjustedWidth > self.maxWidth{
+            self.currentWidth = self.maxWidth
+        }
+        self.setNeedsLayout()
+    }
 }
 
+extension String{
+    public func getWidthOfString(usingFont font: UIFont) -> CGFloat{
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = self.size(withAttributes: attributes)
+        return size.width
+    }
+}

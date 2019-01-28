@@ -162,6 +162,12 @@ class CanvasView: UIScrollView{
             unwrappedEdgeView.redrawEdge()
         }
     }
+    
+    public func setTextInNodeView(node:NodeModel, text:String){
+        if let unwrappedNodeView = self.NodeAndViewDict[node]{
+            unwrappedNodeView.setText(text: text)
+        }
+    }
 }
 
 extension CanvasView: UIScrollViewDelegate{

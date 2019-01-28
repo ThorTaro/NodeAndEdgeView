@@ -10,6 +10,7 @@ import UIKit
 
 class NodeModel:Equatable, Hashable{
     private let id = NSUUID()
+    private var text = String()
     private var isSelected:Bool = false
     
     internal var hashValue: Int{
@@ -46,4 +47,11 @@ class NodeModel:Equatable, Hashable{
         return self.isSelected
     }
     
+    public func setText(text:String){
+        self.text = text
+    }
+    
+    public func getText() -> String{
+        return self.text
+    }
 }
