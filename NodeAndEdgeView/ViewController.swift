@@ -119,6 +119,7 @@ extension ViewController:sideMenuDelegate{
             guard let unwrappedSelectedNode = weakself.nodeMap.searchSelectedNode() else{
                 return
             }
+            unwrappedSelectedNode.setText(text: text)
             weakself.canvas.setTextInNodeView(node: unwrappedSelectedNode, text: text)
             weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
         })

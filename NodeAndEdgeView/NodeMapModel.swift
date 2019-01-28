@@ -32,6 +32,7 @@ struct NodeMapModel {
         print("-------All Node Status-------")
         for node in nodes{
             print("Node ID:\(node.getID())")
+            print("Text :\(node.getText())")
             let bool = node.getStatus()
             print("isSelected:\(bool)")
         }

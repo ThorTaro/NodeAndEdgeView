@@ -24,7 +24,7 @@ class NodeView: UIView {
     private let defaultHeight:CGFloat = 50.0
     private let maxWidth:CGFloat = 800.0
     private var currentWidth:CGFloat = 0.0
-    private var currentText:String = " "
+    private var currentText = String()
     
     required init(view:CanvasView, node:NodeModel) {
         self.view = view
