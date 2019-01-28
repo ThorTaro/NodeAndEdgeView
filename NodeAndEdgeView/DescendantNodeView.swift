@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NodeView: UIView {
+class DescendantNodeView: UIView {
     unowned var view:CanvasView
     unowned var node:NodeModel
     private var previousPosition:CGPoint?
@@ -76,7 +76,7 @@ class NodeView: UIView {
         if !self.view.getSelectedModeStatus(){
             self.superview?.bringSubviewToFront(self)
         }else{
-            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView, !self.view.isLooped(childNode: touchedView.node){
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? DescendantNodeView, !self.view.isLooped(childNode: touchedView.node){
                 self.view.createEdge(childNode: touchedView.node)
             }
         }

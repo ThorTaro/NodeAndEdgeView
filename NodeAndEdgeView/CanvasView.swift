@@ -18,7 +18,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
 }
 
 class CanvasView: UIScrollView{
-    private var NodeAndViewDict = [NodeModel:NodeView]()
+    private var NodeAndViewDict = [NodeModel:DescendantNodeView]()
     private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
@@ -68,7 +68,7 @@ class CanvasView: UIScrollView{
     }
     
     public func createNodeView(node:NodeModel){
-        let newNodeView = NodeView(view: self, node: node)
+        let newNodeView = DescendantNodeView(view: self, node: node)
         self.NodeAndViewDict[node] = newNodeView
         self.canvasContainer.addSubview(newNodeView)
         self.canvasContainer.bringSubviewToFront(newNodeView)

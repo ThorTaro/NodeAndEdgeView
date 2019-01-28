@@ -11,7 +11,7 @@
 		5011728B21F6027800F9DD82 /* EdgeMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011728A21F6027800F9DD82 /* EdgeMapModel.swift */; };
 		503E17CB21F2323200DD5EBA /* NodeMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CA21F2323200DD5EBA /* NodeMapModel.swift */; };
 		503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CC21F2326400DD5EBA /* NodeModel.swift */; };
-		503E17CF21F2327800DD5EBA /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CE21F2327800DD5EBA /* NodeView.swift */; };
+		503E17CF21F2327800DD5EBA /* DescendantNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CE21F2327800DD5EBA /* DescendantNodeView.swift */; };
 		5043EC0921FF31D700B98A6F /* AncestorNodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043EC0821FF31D700B98A6F /* AncestorNodeView.swift */; };
 		506443D221F1BADA0081994F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506443D121F1BADA0081994F /* AppDelegate.swift */; };
 		506443D421F1BADA0081994F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506443D321F1BADA0081994F /* ViewController.swift */; };
@@ -28,7 +28,7 @@
 		5011728A21F6027800F9DD82 /* EdgeMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeMapModel.swift; sourceTree = "<group>"; };
 		503E17CA21F2323200DD5EBA /* NodeMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeMapModel.swift; sourceTree = "<group>"; };
 		503E17CC21F2326400DD5EBA /* NodeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeModel.swift; sourceTree = "<group>"; };
-		503E17CE21F2327800DD5EBA /* NodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
+		503E17CE21F2327800DD5EBA /* DescendantNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescendantNodeView.swift; sourceTree = "<group>"; };
 		5043EC0821FF31D700B98A6F /* AncestorNodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorNodeView.swift; sourceTree = "<group>"; };
 		506443CE21F1BADA0081994F /* NodeAndEdgeView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NodeAndEdgeView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		506443D121F1BADA0081994F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,7 +78,7 @@
 				50AAD34F21FAFA2000D3C73F /* MenuItemCell.swift */,
 				503E17CA21F2323200DD5EBA /* NodeMapModel.swift */,
 				503E17CC21F2326400DD5EBA /* NodeModel.swift */,
-				503E17CE21F2327800DD5EBA /* NodeView.swift */,
+				503E17CE21F2327800DD5EBA /* DescendantNodeView.swift */,
 				5043EC0821FF31D700B98A6F /* AncestorNodeView.swift */,
 				5011728A21F6027800F9DD82 /* EdgeMapModel.swift */,
 				5011728821F6006C00F9DD82 /* EdgeModel.swift */,
@@ -169,7 +169,7 @@
 				5011728B21F6027800F9DD82 /* EdgeMapModel.swift in Sources */,
 				506443E421F1BC350081994F /* CanvasView.swift in Sources */,
 				507DE93421F7361100D3C2BE /* EdgeView.swift in Sources */,
-				503E17CF21F2327800DD5EBA /* NodeView.swift in Sources */,
+				503E17CF21F2327800DD5EBA /* DescendantNodeView.swift in Sources */,
 				50AAD35021FAFA2000D3C73F /* MenuItemCell.swift in Sources */,
 				503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */,
 				50B075D321FA246F008C1D0A /* SideMenuView.swift in Sources */,

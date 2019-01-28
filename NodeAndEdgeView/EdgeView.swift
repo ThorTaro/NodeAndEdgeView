@@ -9,11 +9,11 @@
 import UIKit
 
 class EdgeView:CAShapeLayer{
-    private weak var parentNodeView:NodeView?
-    private weak var childNodeView:NodeView?
+    private weak var parentNodeView:DescendantNodeView?
+    private weak var childNodeView:DescendantNodeView?
     private var edge = UIBezierPath()
     
-    init(parentNodeView:NodeView?, childNodeView:NodeView?) {
+    init(parentNodeView:DescendantNodeView?, childNodeView:DescendantNodeView?) {
         self.parentNodeView = parentNodeView
         self.childNodeView = childNodeView
         super.init()

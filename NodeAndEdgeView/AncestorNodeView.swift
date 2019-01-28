@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AncestorNodeView: NodeView {
+class AncestorNodeView: DescendantNodeView {
     required init(view: CanvasView, node: NodeModel) {
         super.init(view: view, node: node)
     }
