@@ -20,6 +20,11 @@ class ViewController: UIViewController {
         self.setupMenu()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.setAncestor()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.canvas.adjustCanvas(frame:self.view.bounds)
@@ -38,6 +43,17 @@ class ViewController: UIViewController {
                                                height: self.view.bounds.height / 2))
         self.menu.sideMenuController = self
         self.view.addSubview(self.menu)
+    }
+    
+    private func setAncestor(){
+        let newAncestorNode = self.nodeMap.addNode(position: CGPoint.zero)
+        self.canvas.createAncestorNodeView(node: newAncestorNode)
+        guard let ancestorNodeModel = self.nodeMap.getAncestor() else {
+            return
+        }
+        self.canvas.moveAncestorCenter(node: ancestorNodeModel)
+        self.nodeSelectedInView(view: self.canvas, selectedNode: ancestorNodeModel)
+        self.tappedTextEdit()
     }
 }
 
@@ -84,7 +100,7 @@ extension ViewController:nodeControlDelegate{
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
             self.menu.showMenu()
-            self.nodeMap.getNodesStatus() // Print Debug
+            self.nodeMap.getNodesStatus()
             view.isNodeSelectedMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
@@ -93,7 +109,7 @@ extension ViewController:nodeControlDelegate{
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
                 view.isEdgeCreationMode(bool: false)
-                view.SelectNode(node: unwrappedSelectedNode)
+                view.SelectNode(node: unwrappedSelectedNode, isSelected: false)
             }
         }
     }

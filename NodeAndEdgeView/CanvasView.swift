@@ -18,7 +18,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
 }
 
 class CanvasView: UIScrollView{
-    private var NodeAndViewDict = [NodeModel:NodeView]()
+    private var NodeAndViewDict = [NodeModel:DescendantNodeView]()
     private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
@@ -68,7 +68,7 @@ class CanvasView: UIScrollView{
     }
     
     public func createNodeView(node:NodeModel){
-        let newNodeView = NodeView(view: self, node: node)
+        let newNodeView = DescendantNodeView(view: self, node: node)
         self.NodeAndViewDict[node] = newNodeView
         self.canvasContainer.addSubview(newNodeView)
         self.canvasContainer.bringSubviewToFront(newNodeView)
@@ -100,10 +100,10 @@ class CanvasView: UIScrollView{
         }
     }
     
-    public func nodeSelected(selectedNode:NodeModel){
+    public func nodeSelected(selectedNode:NodeModel, isSelected:Bool){
         if let unwrappedNodeController = self.nodeController{
             unwrappedNodeController.nodeSelectedInView(view: self, selectedNode: selectedNode)
-            self.SelectNode(node: selectedNode)
+            self.SelectNode(node: selectedNode, isSelected: isSelected)
         }
     }
     
@@ -111,9 +111,9 @@ class CanvasView: UIScrollView{
         self.nodeSelectedMode = bool
     }
     
-    public func SelectNode(node:NodeModel){
+    public func SelectNode(node:NodeModel, isSelected:Bool){
         if let unwrappedNodeViewDict = self.NodeAndViewDict[node]{
-            unwrappedNodeViewDict.changeNodeViewColor()
+            unwrappedNodeViewDict.changeNodeViewColor(isSelected: isSelected)
         }
     }
     
@@ -167,6 +167,25 @@ class CanvasView: UIScrollView{
         if let unwrappedNodeView = self.NodeAndViewDict[node]{
             unwrappedNodeView.setText(text: text)
         }
+    }
+    
+    public func moveAncestorCenter(node:NodeModel){
+        guard let ancestorNodeView = self.NodeAndViewDict[node] else {
+            return
+        }
+        guard let unwrappedNodeController = self.nodeController else {
+            return
+        }
+        ancestorNodeView.frame.origin = CGPoint(x: self.containerLimitSize.width/2 - ancestorNodeView.getDefaultCenter().x,
+                                                y: self.containerLimitSize.height/2 - ancestorNodeView.getDefaultCenter().y)
+        unwrappedNodeController.nodeMovedInView(view: self, movedNode: node)
+    }
+    
+    public func createAncestorNodeView(node:NodeModel){
+        let newNodeView = AncestorNodeView(view: self, node: node)
+        self.NodeAndViewDict[node] = newNodeView
+        self.canvasContainer.addSubview(newNodeView)
+        self.canvasContainer.bringSubviewToFront(newNodeView)
     }
 }
 

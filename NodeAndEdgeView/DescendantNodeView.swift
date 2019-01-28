@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NodeView: UIView {
+class DescendantNodeView: UIView {
     unowned var view:CanvasView
     unowned var node:NodeModel
     private var previousPosition:CGPoint?
@@ -31,11 +31,9 @@ class NodeView: UIView {
         self.node = node
         super.init(frame: CGRect(origin: self.node.getPosition() , size: CGSize.zero))
         self.currentWidth = self.defaultWidth
-        
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
-        self.addGestureRecognizer(pan)
-        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
+        self.addGestureRecognizer(pan)
         self.addGestureRecognizer(longPress)
         
         self.setNeedsLayout()
@@ -70,7 +68,7 @@ class NodeView: UIView {
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
         if !self.view.getSelectedModeStatus(), recognizer.state == .began{
             print("Node ID:\(self.node.getID()) selected")
-            self.view.nodeSelected(selectedNode: self.node)
+            self.view.nodeSelected(selectedNode: self.node, isSelected: true)
         }
     }
     
@@ -78,7 +76,7 @@ class NodeView: UIView {
         if !self.view.getSelectedModeStatus(){
             self.superview?.bringSubviewToFront(self)
         }else{
-            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? NodeView, !self.view.isLooped(childNode: touchedView.node){
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? DescendantNodeView, !self.view.isLooped(childNode: touchedView.node){
                 self.view.createEdge(childNode: touchedView.node)
             }
         }
@@ -89,7 +87,7 @@ class NodeView: UIView {
         self.setUpView()
     }
     
-    private func setUpView(){
+    open func setUpView(){
         self.frame.origin = CGPoint(x: self.frame.origin.x, y: self.frame.origin.y)
         self.frame.size = CGSize(width: self.currentWidth, height: self.defaultHeight)
         self.backgroundColor = .orange
@@ -141,8 +139,8 @@ class NodeView: UIView {
         return CGPoint(x: deltaX, y: deltaY)
     }
     
-    public func changeNodeViewColor(){
-        if self.backgroundColor == .orange{
+    public func changeNodeViewColor(isSelected:Bool){
+        if isSelected == true{
             self.backgroundColor = .yellow
         }else{
             self.backgroundColor = .orange
@@ -166,6 +164,10 @@ class NodeView: UIView {
             self.currentWidth = self.maxWidth
         }
         self.setNeedsLayout()
+    }
+    
+    public func getDefaultCenter() -> CGPoint{
+        return CGPoint(x: self.defaultWidth/2, y: self.defaultHeight/2)
     }
 }
 
