@@ -34,3 +34,7 @@ class AncestorNodeView: NodeView {
         return
     }
 }
+
+// TODO
+// 抽象クラスを作るの面倒だからやりたくなかったけど，やっぱり作ることにしたからそのうち作る
+// commit messageに書いたけど，見た目とPan GestureとDeleteをして欲しくないのでそのあたりもなんとかする
