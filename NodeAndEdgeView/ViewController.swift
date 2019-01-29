@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
     private var edgeMap = EdgeMapModel()
-    private var menu = SideMenuView()
+    private var menuForDescendant = MenuViewForDescendant()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,12 +37,12 @@ class ViewController: UIViewController {
     }
     
     private func setupMenu(){
-        self.menu = SideMenuView(frame: CGRect(x: self.view.bounds.width,
+        self.menuForDescendant = MenuViewForDescendant(frame: CGRect(x: self.view.bounds.width,
                                                y: self.view.frame.origin.y,
                                                width: self.view.bounds.width / 4,
                                                height: self.view.bounds.height / 2))
-        self.menu.sideMenuController = self
-        self.view.addSubview(self.menu)
+        self.menuForDescendant.sideMenuController = self
+        self.view.addSubview(self.menuForDescendant)
     }
     
     private func setAncestor(){
@@ -61,7 +61,7 @@ extension ViewController:nodeControlDelegate{
     func nodeDeletedInView(view: CanvasView, node: NodeModel) {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
             unwrappedSelectedNode.selected(bool: false)
-            self.menu.hideMenu()
+            self.menuForDescendant.hideMenu()
             view.isEdgeCreationMode(bool: false)
             view.isNodeSelectedMode(bool: false)
             let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
@@ -99,13 +99,13 @@ extension ViewController:nodeControlDelegate{
     func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
-            self.menu.showMenu()
+            self.menuForDescendant.showMenu()
             self.nodeMap.getNodesStatus()
             view.isNodeSelectedMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
                 unwrappedSelectedNode.selected(bool: false)
-                self.menu.hideMenu()
+                self.menuForDescendant.hideMenu()
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
                 view.isEdgeCreationMode(bool: false)
@@ -120,7 +120,7 @@ extension ViewController:nodeControlDelegate{
     }
 }
 
-extension ViewController:sideMenuDelegate{
+extension ViewController:MenuForDescendantDelegate{
     func tappedTextEdit() {
         let AlertController = UIAlertController(title: "Text", message: "", preferredStyle: .alert)
         let OKAlertAction = UIAlertAction(title: "OK", style: .default, handler:{[weak AlertController, weak self](action) -> Void in
@@ -154,7 +154,7 @@ extension ViewController:sideMenuDelegate{
         self.present(AlertController, animated: true, completion: nil)
     }
     
-    func tappedDeletaNode() {
+    func tappedDeleteNode() {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
             if !self.canvas.isAncestor(node: unwrappedSelectedNode){
                 self.canvas.deleteNodeView(node:unwrappedSelectedNode)

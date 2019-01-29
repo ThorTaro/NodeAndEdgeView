@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol sideMenuDelegate:NSObjectProtocol{
+protocol MenuForDescendantDelegate:NSObjectProtocol{
     func tappedTextEdit()
     func tappedCreateEdge()
-    func tappedDeletaNode()
+    func tappedDeleteNode()
 }
 
-class SideMenuView:UIView{
+class MenuViewForDescendant:UIView{
     private let itemSet:[String] = ["Text Edit","Create Edge","Delete"]
     
     private var tableView:UITableView = {
@@ -26,7 +26,7 @@ class SideMenuView:UIView{
         return table
     }()
     
-    public weak var sideMenuController:sideMenuDelegate?
+    public weak var sideMenuController:MenuForDescendantDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,7 +75,7 @@ class SideMenuView:UIView{
     }
 }
 
-extension SideMenuView:UITableViewDelegate{
+extension MenuViewForDescendant:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0{
             if let unwrappedMenuController = self.sideMenuController{
@@ -87,7 +87,7 @@ extension SideMenuView:UITableViewDelegate{
             }
         }else if indexPath.row == 2{
             if let unwrappedSideMenuController = self.sideMenuController{
-                unwrappedSideMenuController.tappedDeletaNode()
+                unwrappedSideMenuController.tappedDeleteNode()
             }
         }else{
             print("Out of range")
@@ -95,7 +95,7 @@ extension SideMenuView:UITableViewDelegate{
     }
 }
 
-extension SideMenuView:UITableViewDataSource{
+extension MenuViewForDescendant:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.itemSet.count
     }
