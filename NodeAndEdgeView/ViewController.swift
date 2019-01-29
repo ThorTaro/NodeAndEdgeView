@@ -156,7 +156,19 @@ extension ViewController:sideMenuDelegate{
     
     func tappedDeletaNode() {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-            self.canvas.deleteNodeView(node:unwrappedSelectedNode)
+            if !self.canvas.isAncestor(node: unwrappedSelectedNode){
+                self.canvas.deleteNodeView(node:unwrappedSelectedNode)
+            }else{
+                let cautionAlert = UIAlertController(title: "Caution", message: "The ancestor node can't be deleted.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default){[weak self](action) -> Void in
+                    guard let weakself = self else{
+                        return
+                    }
+                    weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
+                }
+                cautionAlert.addAction(okAction)
+                self.present(cautionAlert, animated: true, completion: nil)
+            }
         }
     }
     

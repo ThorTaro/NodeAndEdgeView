@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AncestorNodeView: DescendantNodeView {
+class AncestorNodeView: AbstractNodeView {
     required init(view: CanvasView, node: NodeModel) {
         super.init(view: view, node: node)
     }
@@ -17,12 +17,12 @@ class AncestorNodeView: DescendantNodeView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setUpView(){
+    override func setUpView() {
         super.setUpView()
         self.backgroundColor = .magenta
     }
     
-    override func changeNodeViewColor(isSelected: Bool) {
+    override func changeNodeViewColor(isSelected:Bool){
         if isSelected == true{
             self.backgroundColor = .yellow
         }else{
@@ -30,11 +30,19 @@ class AncestorNodeView: DescendantNodeView {
         }
     }
     
-    @objc override func panHandler(recongnizer: UIPanGestureRecognizer) {
-        return
+    override func setText(text: String) {
+        self.currentText = text
+        self.textLabel.text = self.currentText
+        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultHeight
+        
+        if adjustedWidth <= self.defaultWidth{
+            self.currentWidth = self.defaultWidth
+        }else if adjustedWidth >  self.defaultWidth, adjustedWidth <= self.maxWidth{
+            self.currentWidth = adjustedWidth
+        }else if adjustedWidth > self.maxWidth{
+            self.currentWidth = self.maxWidth
+        }
+        self.frame.origin.x = self.view.getCanvasLimitSize().midX - self.currentWidth / 2 
+        self.setNeedsLayout()
     }
 }
-
-// TODO
-// 抽象クラスを作るの面倒だからやりたくなかったけど，やっぱり作ることにしたからそのうち作る
-// commit messageに書いたけど，見た目とPan GestureとDeleteをして欲しくないのでそのあたりもなんとかする

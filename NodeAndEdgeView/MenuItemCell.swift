@@ -47,6 +47,7 @@ class MenuItemCell:UITableViewCell{
     public func setImage(name:String){
         self.icon.image = UIImage(named: name)
     }
+    
     public func setItem(name:String){
         self.itemLabel.text = name
     }
