@@ -29,4 +29,20 @@ class AncestorNodeView: AbstractNodeView {
             self.backgroundColor = .magenta
         }
     }
+    
+    override func setText(text: String) {
+        self.currentText = text
+        self.textLabel.text = self.currentText
+        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultHeight
+        
+        if adjustedWidth <= self.defaultWidth{
+            self.currentWidth = self.defaultWidth
+        }else if adjustedWidth >  self.defaultWidth, adjustedWidth <= self.maxWidth{
+            self.currentWidth = adjustedWidth
+        }else if adjustedWidth > self.maxWidth{
+            self.currentWidth = self.maxWidth
+        }
+        self.frame.origin.x = self.view.getCanvasLimitSize().midX - self.currentWidth / 2 
+        self.setNeedsLayout()
+    }
 }

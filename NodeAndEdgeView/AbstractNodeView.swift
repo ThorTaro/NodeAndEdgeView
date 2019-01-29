@@ -12,7 +12,7 @@ class AbstractNodeView: UIView{
     unowned var view:CanvasView
     unowned var node:NodeModel
     public var previousPosition:CGPoint?
-    private var textLabel:UILabel = {
+    public var textLabel:UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textColor = .black
@@ -20,11 +20,11 @@ class AbstractNodeView: UIView{
         return label
     }()
     
-    private let defaultWidth:CGFloat = 200.0
-    private let defaultHeight:CGFloat = 50.0
-    private let maxWidth:CGFloat = 800.0
-    private var currentWidth:CGFloat = 0.0
-    private var currentText = String()
+    public let defaultWidth:CGFloat = 200.0
+    public let defaultHeight:CGFloat = 50.0
+    public let maxWidth:CGFloat = 800.0
+    public var currentWidth:CGFloat = 0.0
+    public var currentText = String()
     
     required init(view:CanvasView, node:NodeModel) {
         self.view = view
