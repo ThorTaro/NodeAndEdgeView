@@ -9,11 +9,7 @@
 import UIKit
 
 struct EdgeMapModel {
-    private var edges = [EdgeModel](){
-        didSet{
-            print("New edge appended")
-        }
-    }
+    private var edges = [EdgeModel]()
     
     mutating func addEdge(newEdge:EdgeModel) -> Bool{
         if !self.edges.contains(newEdge){

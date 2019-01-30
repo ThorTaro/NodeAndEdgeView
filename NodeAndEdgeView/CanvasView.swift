@@ -15,11 +15,12 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func createEdgeInView(view:CanvasView, childNode:NodeModel)
     func nodeMovedInView(view:CanvasView, movedNode:NodeModel)
     func nodeDeletedInView(view:CanvasView ,node:NodeModel)
+    func edgeDeletedInView(view:CanvasView, edge:EdgeModel)
 }
 
 class CanvasView: UIScrollView{
     private var NodeAndViewDict = [NodeModel:AbstractNodeView]()
-    private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
+    private var NodeAndEdgeDict = [EdgeModel:EdgeViewAndMenu]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: UIScreen.main.bounds.width * 5,
@@ -151,8 +152,8 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
-        let newEdgeView = EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
-        self.canvasContainer.layer.insertSublayer(newEdgeView, at: 1)
+        let newEdgeView = EdgeViewAndMenu(canvas: self, edge:newEdge, parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
+        self.canvasContainer.insertSubview(newEdgeView, at: 1)
         self.NodeAndEdgeDict[newEdge] = newEdgeView
     }
     
@@ -194,6 +195,25 @@ class CanvasView: UIScrollView{
         }
         
         return type(of: unwrappedNodeView) === AncestorNodeView.self
+    }
+    
+    public func activateEdgeView(edges:[EdgeModel], bool:Bool){
+        for edge in edges{
+            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else{
+                continue
+            }
+            if bool{
+                unwrappedEdgeView.showButton()
+            }else{
+                unwrappedEdgeView.hideButton()
+            }
+        }
+    }
+    
+    public func EdgeViewWillDelete(edge:EdgeModel){
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.edgeDeletedInView(view: self, edge: edge)
+        }
     }
 }
 
