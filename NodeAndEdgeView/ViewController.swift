@@ -58,6 +58,12 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:nodeControlDelegate{
+    func edgeDeletedInView(view: CanvasView, edge: EdgeModel) {
+        let deleteEdgeModel:[EdgeModel] = [edge]
+        self.edgeMap.deleteEdge(edges: deleteEdgeModel)
+        view.deleteEdgeView(edges: deleteEdgeModel)
+    }
+    
     func nodeDeletedInView(view: CanvasView, node: NodeModel) {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
             unwrappedSelectedNode.selected(bool: false)
@@ -101,9 +107,11 @@ extension ViewController:nodeControlDelegate{
             unwrappedSelectedNode.selected(bool: true)
             self.menuForDescendant.showMenu()
             self.nodeMap.getNodesStatus()
+            view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: true)
             view.isNodeSelectedMode(bool: true)
         }else{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
+                view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: false)
                 unwrappedSelectedNode.selected(bool: false)
                 self.menuForDescendant.hideMenu()
                 self.nodeMap.getNodesStatus()

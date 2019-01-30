@@ -23,7 +23,6 @@
 		50AAD35021FAFA2000D3C73F /* MenuItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AAD34F21FAFA2000D3C73F /* MenuItemCell.swift */; };
 		50B075D321FA246F008C1D0A /* MenuViewForDescendant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B075D221FA246F008C1D0A /* MenuViewForDescendant.swift */; };
 		50D7BFB72200CE96009A0E78 /* MenuViewForAncestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D7BFB62200CE96009A0E78 /* MenuViewForAncestor.swift */; };
-		50D7BFB92200CEA4009A0E78 /* NenuViewForEdge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D7BFB82200CEA4009A0E78 /* NenuViewForEdge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +44,6 @@
 		50AAD34F21FAFA2000D3C73F /* MenuItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemCell.swift; sourceTree = "<group>"; };
 		50B075D221FA246F008C1D0A /* MenuViewForDescendant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewForDescendant.swift; sourceTree = "<group>"; };
 		50D7BFB62200CE96009A0E78 /* MenuViewForAncestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewForAncestor.swift; sourceTree = "<group>"; };
-		50D7BFB82200CEA4009A0E78 /* NenuViewForEdge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NenuViewForEdge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +79,6 @@
 				506443D121F1BADA0081994F /* AppDelegate.swift */,
 				506443D321F1BADA0081994F /* ViewController.swift */,
 				50D7BFB62200CE96009A0E78 /* MenuViewForAncestor.swift */,
-				50D7BFB82200CEA4009A0E78 /* NenuViewForEdge.swift */,
 				50B075D221FA246F008C1D0A /* MenuViewForDescendant.swift */,
 				50AAD34F21FAFA2000D3C73F /* MenuItemCell.swift */,
 				503E17CA21F2323200DD5EBA /* NodeMapModel.swift */,
@@ -181,7 +178,6 @@
 				501E3BD521FF6D8F004616AF /* AbstractNodeView.swift in Sources */,
 				503E17CF21F2327800DD5EBA /* DescendantNodeView.swift in Sources */,
 				50AAD35021FAFA2000D3C73F /* MenuItemCell.swift in Sources */,
-				50D7BFB92200CEA4009A0E78 /* NenuViewForEdge.swift in Sources */,
 				503E17CD21F2326400DD5EBA /* NodeModel.swift in Sources */,
 				50B075D321FA246F008C1D0A /* MenuViewForDescendant.swift in Sources */,
 				509ABC4122019DAB001426C2 /* EdgeViewAndMenu.swift in Sources */,

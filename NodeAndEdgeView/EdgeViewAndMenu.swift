@@ -10,6 +10,7 @@ import UIKit
 
 class EdgeViewAndMenu: UIView{
     private unowned var canvas:CanvasView
+    private unowned var model:EdgeModel
     private weak var parentNodeView:AbstractNodeView?
     private weak var childNodeView:AbstractNodeView?
     private var edgePath = UIBezierPath()
@@ -18,14 +19,14 @@ class EdgeViewAndMenu: UIView{
     private var button:UIButton = {
         let button = UIButton()
             button.frame.size = CGSize(width: 30, height: 30)
-            button.layer.cornerRadius = 15
-            button.layer.masksToBounds = true
-            button.backgroundColor = .darkGray
+            button.backgroundColor = .clear
+            button.setImage(UIImage(named: "DeleteIcon"), for: .normal)
         return button
     }()
     
-    required init(canvas:CanvasView ,parentNodeView:AbstractNodeView?, childNodeView:AbstractNodeView?) {
+    required init(canvas:CanvasView, edge:EdgeModel, parentNodeView:AbstractNodeView?, childNodeView:AbstractNodeView?) {
         self.canvas = canvas
+        self.model = edge
         self.parentNodeView = parentNodeView
         self.childNodeView = childNodeView
         super.init(frame: CGRect.zero)
@@ -107,7 +108,7 @@ class EdgeViewAndMenu: UIView{
     
     @objc func didTapped(sender:UIButton){
         if self.canvas.getSelectedModeStatus(){
-            print("button tapped")
+            self.canvas.EdgeViewWillDelete(edge: self.model)
         }
     }
     
@@ -117,5 +118,13 @@ class EdgeViewAndMenu: UIView{
     
     public func hideButton(){
         self.button.isHidden = true
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        if view == self {
+            return nil
+        }
+        return view
     }
 }

@@ -15,6 +15,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func createEdgeInView(view:CanvasView, childNode:NodeModel)
     func nodeMovedInView(view:CanvasView, movedNode:NodeModel)
     func nodeDeletedInView(view:CanvasView ,node:NodeModel)
+    func edgeDeletedInView(view:CanvasView, edge:EdgeModel)
 }
 
 class CanvasView: UIScrollView{
@@ -151,7 +152,7 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
-        let newEdgeView = EdgeViewAndMenu(canvas: self ,parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
+        let newEdgeView = EdgeViewAndMenu(canvas: self, edge:newEdge, parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
         self.canvasContainer.insertSubview(newEdgeView, at: 1)
         self.NodeAndEdgeDict[newEdge] = newEdgeView
     }
@@ -194,6 +195,25 @@ class CanvasView: UIScrollView{
         }
         
         return type(of: unwrappedNodeView) === AncestorNodeView.self
+    }
+    
+    public func activateEdgeView(edges:[EdgeModel], bool:Bool){
+        for edge in edges{
+            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else{
+                continue
+            }
+            if bool{
+                unwrappedEdgeView.showButton()
+            }else{
+                unwrappedEdgeView.hideButton()
+            }
+        }
+    }
+    
+    public func EdgeViewWillDelete(edge:EdgeModel){
+        if let unwrappedNodeController = self.nodeController{
+            unwrappedNodeController.edgeDeletedInView(view: self, edge: edge)
+        }
     }
 }
 
