@@ -19,7 +19,7 @@ protocol nodeControlDelegate:NSObjectProtocol{
 
 class CanvasView: UIScrollView{
     private var NodeAndViewDict = [NodeModel:AbstractNodeView]()
-    private var NodeAndEdgeDict = [EdgeModel:EdgeView]()
+    private var NodeAndEdgeDict = [EdgeModel:NewEdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: UIScreen.main.bounds.width * 5,
@@ -151,8 +151,8 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
-        let newEdgeView = EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
-        self.canvasContainer.layer.insertSublayer(newEdgeView, at: 1)
+        let newEdgeView = NewEdgeView(canvas: self ,parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
+        self.canvasContainer.insertSubview(newEdgeView, at: 1)
         self.NodeAndEdgeDict[newEdge] = newEdgeView
     }
     
