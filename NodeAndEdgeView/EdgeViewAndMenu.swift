@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NewEdgeView: UIView{
+class EdgeViewAndMenu: UIView{
     private unowned var canvas:CanvasView
     private weak var parentNodeView:AbstractNodeView?
     private weak var childNodeView:AbstractNodeView?
