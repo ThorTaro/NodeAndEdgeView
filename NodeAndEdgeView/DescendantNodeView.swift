@@ -41,16 +41,29 @@ class DescendantNodeView: AbstractNodeView {
         }
     }
     
-    override func setUpView() {
-        super.setUpView()
-        self.backgroundColor = .orange
+    override func createLayer() {
+        self.skinPath.removeAllPoints()
+        self.skinLayer.removeFromSuperlayer()
+        self.skinPath = UIBezierPath(roundedRect: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: self.frame.width,
+                                                         height: self.frame.height),
+                                     cornerRadius: self.frame.height / 2)
+        self.skinLayer.strokeColor = UIColor.orange.cgColor
+        self.skinLayer.fillColor = UIColor.orange.cgColor
+        self.skinLayer.borderWidth = 0
+        self.skinLayer.path = self.skinPath.cgPath
+        self.layer.addSublayer(self.skinLayer)
+        self.view.nodeMoved(node: self.node)
     }
     
     override func changeNodeViewColor(isSelected:Bool){
         if isSelected == true{
-            self.backgroundColor = .yellow
+            self.skinLayer.strokeColor = UIColor.yellow.cgColor
+            self.skinLayer.fillColor = UIColor.yellow.cgColor
         }else{
-            self.backgroundColor = .orange
+            self.skinLayer.strokeColor = UIColor.orange.cgColor
+            self.skinLayer.fillColor = UIColor.orange.cgColor
         }
     }
 }

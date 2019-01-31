@@ -11,7 +11,9 @@ import UIKit
 class AbstractNodeView: UIView{
     unowned var view:CanvasView
     unowned var node:NodeModel
-    public var previousPosition:CGPoint?
+
+    public let skinLayer = CAShapeLayer()
+    public var skinPath = UIBezierPath()
     public var textLabel:UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
@@ -20,8 +22,9 @@ class AbstractNodeView: UIView{
         return label
     }()
     
-    public let defaultWidth:CGFloat = 200.0
-    public let defaultHeight:CGFloat = 50.0
+    public var previousPosition:CGPoint?
+    public var defaultWidth:CGFloat = 200.0
+    public var defaultHeight:CGFloat = 50.0
     public let maxWidth:CGFloat = 800.0
     public var currentWidth:CGFloat = 0.0
     public var currentText = String()
@@ -33,7 +36,6 @@ class AbstractNodeView: UIView{
         self.currentWidth = self.defaultWidth
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
         self.addGestureRecognizer(longPress)
-        
         self.setNeedsLayout()
     }
     
@@ -60,18 +62,22 @@ class AbstractNodeView: UIView{
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.setUpView()
+        self.backgroundColor = .clear
+        self.setupView()
     }
     
-    public func setUpView(){
+    public func setupView(){
         self.frame.origin = CGPoint(x: self.frame.origin.x, y: self.frame.origin.y)
         self.frame.size = CGSize(width: self.currentWidth, height: self.defaultHeight)
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = self.frame.height/2
+        self.createLayer()
         self.adjustPosition(delta: self.outsideContainer(createdFrame: self.frame))
         self.textLabel.frame = self.bounds
         self.textLabel.font = UIFont.systemFont(ofSize: self.textLabel.frame.height / 2)
         self.addSubview(self.textLabel)
+    }
+    
+    public func createLayer(){
+        
     }
     
     public func ableToMove(newPosition:CGPoint) -> Bool{
@@ -130,6 +136,7 @@ class AbstractNodeView: UIView{
         }else if adjustedWidth > self.maxWidth{
             self.currentWidth = self.maxWidth
         }
+        
         self.setNeedsLayout()
     }
     
@@ -139,6 +146,13 @@ class AbstractNodeView: UIView{
     
     public func changeNodeViewColor(isSelected:Bool){
         
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if self.skinPath.contains(point) {
+            return super.hitTest(point, with: event)
+        }
+        return nil
     }
 }
 
