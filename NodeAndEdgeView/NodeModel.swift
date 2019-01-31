@@ -12,6 +12,7 @@ class NodeModel:Equatable, Hashable{
     private let id = NSUUID()
     private var text = String()
     private var isSelected:Bool = false
+    private var isAncestor:Bool = false
     
     internal var hashValue: Int{
         return self.id.hashValue
@@ -53,5 +54,13 @@ class NodeModel:Equatable, Hashable{
     
     public func getText() -> String{
         return self.text
+    }
+    
+    public func becomeAncestor(){
+        self.isAncestor = true
+    }
+    
+    public func getAttribute() -> Bool{
+        return self.isAncestor
     }
 }

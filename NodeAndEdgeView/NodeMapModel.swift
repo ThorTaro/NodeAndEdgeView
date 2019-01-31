@@ -50,4 +50,17 @@ struct NodeMapModel {
     public func getAncestor() -> NodeModel?{
         return self.nodes.first
     }
+    
+    public func makeAncestor(ancestorNode:NodeModel){
+        if let i = self.nodes.index(of:ancestorNode){
+            self.nodes[i].becomeAncestor()
+        }
+    }
+    
+    public func isAncestor(node:NodeModel) -> Bool{
+        if let i = self.nodes.index(of:node){
+            return self.nodes[i].getAttribute()
+        }
+        return false
+    }
 }
