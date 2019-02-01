@@ -39,9 +39,15 @@ class EdgeViewAndMenu: UIView{
     }
     
     private func createPath(){
+        let basePositions = self.setStartPositionAndEndPosition()
+        
+        self.edgePath = self.makeRectPath(parentPosition: basePositions.startPosition, childPosition: basePositions.endPosition, lineWidth: 30)
+    }
+    
+    private func setStartPositionAndEndPosition() -> (startPosition:CGPoint, endPosition:CGPoint){
         guard let unwrappedParentNodeView = self.parentNodeView, let unwrappedChildNodeView = self.childNodeView else {
             print("Edge drawing failed")
-            return
+            return (startPosition:CGPoint.zero, endPosition:CGPoint.zero)
         }
         var startPosition = CGPoint.zero
         var endPosition = CGPoint.zero
@@ -62,14 +68,46 @@ class EdgeViewAndMenu: UIView{
             print("segmentetion error")
         }
         
-        self.edgePath.move(to: startPosition)
-        self.edgePath.addLine(to: endPosition)
-        self.edgePath.close()
+        return (startPosition:startPosition, endPosition:endPosition)
+    }
+    
+    private func makeRectPath(parentPosition:CGPoint, childPosition:CGPoint, lineWidth:CGFloat) -> UIBezierPath{
+        let path = UIBezierPath()
+        let halfWidth:CGFloat = lineWidth/2
+        if parentPosition.x == childPosition.x{
+            print("vertical")
+            path.move(to: CGPoint(x: parentPosition.x + halfWidth, y: parentPosition.y))
+            path.addLine(to: CGPoint(x: childPosition.x + halfWidth, y: childPosition.y))
+            path.addLine(to: CGPoint(x: childPosition.x - halfWidth, y: childPosition.y))
+            path.addLine(to: CGPoint(x: parentPosition.x - halfWidth, y: parentPosition.y))
+            path.close()
+        }else if parentPosition.y == childPosition.y{
+            print("holizon")
+            path.move(to: CGPoint(x: parentPosition.x, y: parentPosition.y + halfWidth + 1))
+            path.move(to: CGPoint(x: childPosition.x, y: childPosition.y + halfWidth + 1))
+            path.move(to: CGPoint(x: childPosition.x, y: childPosition.y - halfWidth * 2 + 1))
+            path.move(to: CGPoint(x: parentPosition.x, y: parentPosition.y - halfWidth * 2 + 1))
+            print(path)
+            path.close()
+        }else{
+            print("other")
+            let m:CGFloat = (parentPosition.y - childPosition.y)/(parentPosition.x - childPosition.x)
+            let m_p:CGFloat = -1/m
+            let delta:CGFloat = sqrt(pow(halfWidth, 2.0)/(pow(m_p, 2.0) + 1))
+            
+            path.move(to: CGPoint(x: parentPosition.x + delta, y: m_p * (parentPosition.x + delta) + parentPosition.y - m_p * parentPosition.x
+            ))
+            path.addLine(to: CGPoint(x: childPosition.x + delta, y: m_p * (childPosition.x + delta) + childPosition.y - m_p * childPosition.x))
+            path.addLine(to: CGPoint(x: childPosition.x - delta, y: m_p * (childPosition.x - delta) + childPosition.y - m_p * childPosition.x))
+            path.addLine(to: CGPoint(x: parentPosition.x - delta, y: m_p * (parentPosition.x - delta) + parentPosition.y - m_p * parentPosition.x))
+            path.addLine(to: CGPoint(x: parentPosition.x + delta, y: m_p * (parentPosition.x + delta) + parentPosition.y - m_p * parentPosition.x))
+            path.close()
+        }
+        return path
     }
     
     private func createLayer(){
-        self.edgeLayer.lineWidth = 10.0
-        self.edgeLayer.strokeColor = UIColor.lightGray.cgColor
+        self.edgeLayer.fillColor = UIColor.lightGray.cgColor
         self.edgeLayer.path = self.edgePath.cgPath
     }
     
@@ -103,6 +141,8 @@ class EdgeViewAndMenu: UIView{
     }
     
     public func removeEdgeView(){
+        self.edgePath.removeAllPoints()
+        self.edgeLayer.removeFromSuperlayer()
         self.removeFromSuperview()
     }
     
