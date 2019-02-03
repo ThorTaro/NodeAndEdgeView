@@ -75,22 +75,18 @@ class EdgeViewAndMenu: UIView{
         let path = UIBezierPath()
         let halfWidth:CGFloat = lineWidth/2
         if parentPosition.x == childPosition.x{
-            print("vertical")
             path.move(to: CGPoint(x: parentPosition.x + halfWidth, y: parentPosition.y))
             path.addLine(to: CGPoint(x: childPosition.x + halfWidth, y: childPosition.y))
             path.addLine(to: CGPoint(x: childPosition.x - halfWidth, y: childPosition.y))
             path.addLine(to: CGPoint(x: parentPosition.x - halfWidth, y: parentPosition.y))
             path.close()
         }else if parentPosition.y == childPosition.y{
-            print("holizon")
             path.move(to: CGPoint(x: parentPosition.x, y: parentPosition.y + halfWidth + 1))
             path.move(to: CGPoint(x: childPosition.x, y: childPosition.y + halfWidth + 1))
             path.move(to: CGPoint(x: childPosition.x, y: childPosition.y - halfWidth * 2 + 1))
             path.move(to: CGPoint(x: parentPosition.x, y: parentPosition.y - halfWidth * 2 + 1))
-            print(path)
             path.close()
         }else{
-            print("other")
             let m:CGFloat = (parentPosition.y - childPosition.y)/(parentPosition.x - childPosition.x)
             let m_p:CGFloat = -1/m
             let delta:CGFloat = sqrt(pow(halfWidth, 2.0)/(pow(m_p, 2.0) + 1))
@@ -124,7 +120,7 @@ class EdgeViewAndMenu: UIView{
     
     private func setupView(){
         self.frame = self.getFrame()
-        self.backgroundColor = .clear
+        self.backgroundColor = .blue
         self.createPath()
         self.createLayer()
         self.layer.insertSublayer(self.edgeLayer, at: 0)
