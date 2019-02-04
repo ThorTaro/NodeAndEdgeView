@@ -20,7 +20,8 @@ protocol nodeControlDelegate:NSObjectProtocol{
 
 class CanvasView: UIScrollView{
     private var NodeAndViewDict = [NodeModel:AbstractNodeView]()
-    private var NodeAndEdgeDict = [EdgeModel:EdgeViewAndMenu]()
+//    private var NodeAndEdgeDict = [EdgeModel:EdgeViewAndMenu]()
+    private var NodeAndeTESTEdgeDict = [EdgeModel:TEST_EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
                                                           width: UIScreen.main.bounds.width * 5,
@@ -64,6 +65,15 @@ class CanvasView: UIScrollView{
         if let unwrappedNodeController = self.nodeController,!self.getSelectedModeStatus(),recognizer.state == .began{
             let newNodePosition = CGPoint(x: recognizer.location(in: self.canvasContainer).x,
                                           y: recognizer.location(in: self.canvasContainer).y)
+            for key in self.NodeAndeTESTEdgeDict.keys{
+                guard let edeView = self.NodeAndeTESTEdgeDict[key] else{
+                    continue
+                }
+                if edeView.path!.contains(newNodePosition){
+                    print("edge Longpressed")
+                    return
+                }
+            }
             unwrappedNodeController.createNodeInView(view: self, position: newNodePosition)
         }
     }
@@ -87,10 +97,15 @@ class CanvasView: UIScrollView{
     }
     
     public func deleteEdgeView(edges:[EdgeModel]){
+//        for edge in edges{
+//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+//            unwrappedEdgeView.removeEdgeView()
+//            self.NodeAndEdgeDict.removeValue(forKey: edge)
+//        }
         for edge in edges{
-            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+            guard let unwrappedEdgeView = self.NodeAndeTESTEdgeDict[edge] else {continue}
             unwrappedEdgeView.removeEdgeView()
-            self.NodeAndEdgeDict.removeValue(forKey: edge)
+            self.NodeAndeTESTEdgeDict.removeValue(forKey: edge)
         }
         
     }
@@ -152,15 +167,24 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
-        let newEdgeView = EdgeViewAndMenu(canvas: self, edge:newEdge, parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
-        self.canvasContainer.insertSubview(newEdgeView, at: 1)
-        self.NodeAndEdgeDict[newEdge] = newEdgeView
+//        let newEdgeView = EdgeViewAndMenu(canvas: self, edge:newEdge, parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
+//        self.canvasContainer.insertSubview(newEdgeView, at: 1)
+//        self.NodeAndEdgeDict[newEdge] = newEdgeView
+        
+        let newTESTEdgeView = TEST_EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childeNodeView: self.NodeAndViewDict[childNode])
+        self.canvasContainer.layer.insertSublayer(newTESTEdgeView, at: 1)
+        self.NodeAndeTESTEdgeDict[newEdge] = newTESTEdgeView
     }
     
     public func moveEdgeView(edges:[EdgeModel]){
+//        for edge in edges{
+//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
+//            unwrappedEdgeView.redrawEdge()
+//        }
         for edge in edges{
-            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
-            unwrappedEdgeView.redrawEdge()
+            guard let unwrappedEdgeView = self.NodeAndeTESTEdgeDict[edge] else {continue}
+            unwrappedEdgeView.createPath()
+            unwrappedEdgeView.createLayer()
         }
     }
     
@@ -198,16 +222,16 @@ class CanvasView: UIScrollView{
     }
     
     public func activateEdgeView(edges:[EdgeModel], bool:Bool){
-        for edge in edges{
-            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else{
-                continue
-            }
-            if bool{
-                unwrappedEdgeView.showButton()
-            }else{
-                unwrappedEdgeView.hideButton()
-            }
-        }
+//        for edge in edges{
+//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else{
+//                continue
+//            }
+//            if bool{
+//                unwrappedEdgeView.showButton()
+//            }else{
+//                unwrappedEdgeView.hideButton()
+//            }
+//        }
     }
     
     public func EdgeViewWillDelete(edge:EdgeModel){
