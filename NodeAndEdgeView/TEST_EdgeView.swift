@@ -12,13 +12,12 @@ class TEST_EdgeView:CAShapeLayer{
     private weak var parentNodeView:AbstractNodeView?
     private weak var childeNodeView:AbstractNodeView?
     
-    private let EdgeLayer = CAShapeLayer() // Maybe not need?
     private var EdgePath = UIBezierPath()
     private let EdgeWidth:CGFloat = 10.0
     
     required init(parentNodeView:AbstractNodeView?, childeNodeView:AbstractNodeView?) {
-        self.parentNodeView = parentNodeView // Maybe Optional?
-        self.childeNodeView = childeNodeView // Maybe Optional?
+        self.parentNodeView = parentNodeView
+        self.childeNodeView = childeNodeView
         super.init()
         self.createPath()
         self.createLayer()
@@ -52,11 +51,6 @@ class TEST_EdgeView:CAShapeLayer{
             let m:CGFloat = (unwrappedParentNodeView.center.y - unwrappedChildNodeView.center.y)/(unwrappedParentNodeView.center.x - unwrappedChildNodeView.center.x)
             let m_p:CGFloat = (-1)/m
             
-            // 一応傾きが0になる現象を監視(ないはず)
-            if m_p == 0{
-                print("m_p is zero")
-            }
-            
             let delta:CGFloat = sqrt(pow(self.EdgeWidth/2, 2.0)/(pow(m_p, 2.0) + 1.0))
             self.EdgePath.move(to: CGPoint(x: unwrappedParentNodeView.center.x + delta,
                                            y: m_p * (unwrappedParentNodeView.center.x + delta) + unwrappedParentNodeView.center.y - m_p * unwrappedParentNodeView.center.x))
@@ -75,19 +69,8 @@ class TEST_EdgeView:CAShapeLayer{
         self.path = self.EdgePath.cgPath
     }
     
-    // TODO(MEMO)
-    // このクラスに記述する処理じゃないけど，ここにメモしておく
-    // EdgeView(仮称)はCanvasContainer(UIView)に直接描画(insertSublayer)する予定
-    // UIViewのメソッドhitTest()を使ってCAShapeLayerのタップを検知することができるんだけど，
-    // 今までのCAShapeLayerはただの直線だったのでタップできなかった
-    // このクラスは細長い四角形なので領域を持っている(タップ検知ができる)
-    // hitTest()を使うにあたって，すでにCreateNodeViewとかCanvasContainerのスワイプとかNodeSeletedModeの解除とかでジェスチャーが登録されているので，
-    // そのあたりの場合分けをしつつ判定を行う必要がある
-    // さらにいえば，EdgeAndEdgeViewDictに入っている要素を全検索して判定をする必要がある
-    
     public func removeEdgeView(){
         self.EdgePath.removeAllPoints()
-        self.EdgeLayer.removeFromSuperlayer()
         self.removeFromSuperlayer()
     }
 

@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     private let canvas = CanvasView()
     private var nodeMap = NodeMapModel()
     private var edgeMap = EdgeMapModel()
-    private var menuForDescendant = MenuView()
+    private var menuView = MenuView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,12 +37,12 @@ class ViewController: UIViewController {
     }
     
     private func setupMenu(){
-        self.menuForDescendant = MenuView(frame: CGRect(x: self.view.bounds.width,
+        self.menuView = MenuView(frame: CGRect(x: self.view.bounds.width,
                                                y: self.view.frame.origin.y,
                                                width: self.view.bounds.width / 4,
                                                height: self.view.bounds.height / 2))
-        self.menuForDescendant.sideMenuController = self
-        self.view.addSubview(self.menuForDescendant)
+        self.menuView.sideMenuController = self
+        self.view.addSubview(self.menuView)
     }
     
     private func setAncestor(){
@@ -69,7 +69,7 @@ extension ViewController:nodeControlDelegate{
     func nodeDeletedInView(view: CanvasView, node: NodeModel) {
         if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
             unwrappedSelectedNode.selected(bool: false)
-            self.menuForDescendant.hideMenu()
+            self.menuView.hideMenu()
             view.isEdgeCreationMode(bool: false)
             view.isNodeSelectedMode(bool: false)
             let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
@@ -107,7 +107,7 @@ extension ViewController:nodeControlDelegate{
     func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
         if let unwrappedSelectedNode = selectedNode{
             unwrappedSelectedNode.selected(bool: true)
-            self.menuForDescendant.showMenu(isAncestor: self.nodeMap.isAncestor(node: unwrappedSelectedNode))
+            self.menuView.showMenu(isAncestor: self.nodeMap.isAncestor(node: unwrappedSelectedNode))
             self.nodeMap.getNodesStatus()
             view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: true)
             view.isNodeSelectedMode(bool: true)
@@ -115,7 +115,7 @@ extension ViewController:nodeControlDelegate{
             if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
                 view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: false)
                 unwrappedSelectedNode.selected(bool: false)
-                self.menuForDescendant.hideMenu()
+                self.menuView.hideMenu()
                 self.nodeMap.getNodesStatus()
                 view.isNodeSelectedMode(bool: false)
                 view.isEdgeCreationMode(bool: false)
