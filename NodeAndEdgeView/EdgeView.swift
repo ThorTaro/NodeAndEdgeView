@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TEST_EdgeView:CAShapeLayer{
+class EdgeView:CAShapeLayer{
     private weak var parentNodeView:AbstractNodeView?
     private weak var childeNodeView:AbstractNodeView?
     
