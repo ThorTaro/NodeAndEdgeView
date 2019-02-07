@@ -16,11 +16,11 @@ protocol nodeControlDelegate:NSObjectProtocol{
     func nodeMovedInView(view:CanvasView, movedNode:NodeModel)
     func nodeDeletedInView(view:CanvasView ,node:NodeModel)
     func edgeDeletedInView(view:CanvasView, edge:EdgeModel)
+    func edgeSelectedInView(view:CanvasView, edge:EdgeModel)
 }
 
 class CanvasView: UIScrollView{
     private var NodeAndViewDict = [NodeModel:AbstractNodeView]()
-//    private var NodeAndEdgeDict = [EdgeModel:EdgeViewAndMenu]()
     private var NodeAndeTESTEdgeDict = [EdgeModel:TEST_EdgeView]()
     private let canvasContainer = Container(frame: CGRect(x: 0,
                                                           y: 0,
@@ -70,12 +70,19 @@ class CanvasView: UIScrollView{
                     continue
                 }
                 if edeView.path!.contains(newNodePosition){
-                    print("edge Longpressed")
+                    self.edgeViewDidTapped(tappedEdge: key)
                     return
                 }
             }
             unwrappedNodeController.createNodeInView(view: self, position: newNodePosition)
         }
+    }
+    
+    private func edgeViewDidTapped(tappedEdge:EdgeModel){
+        guard let unwrappedNodeController = self.nodeController else{
+            return
+        }
+        unwrappedNodeController.edgeSelectedInView(view: self, edge: tappedEdge)
     }
     
     public func createNodeView(node:NodeModel){
@@ -97,11 +104,6 @@ class CanvasView: UIScrollView{
     }
     
     public func deleteEdgeView(edges:[EdgeModel]){
-//        for edge in edges{
-//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
-//            unwrappedEdgeView.removeEdgeView()
-//            self.NodeAndEdgeDict.removeValue(forKey: edge)
-//        }
         for edge in edges{
             guard let unwrappedEdgeView = self.NodeAndeTESTEdgeDict[edge] else {continue}
             unwrappedEdgeView.removeEdgeView()
@@ -167,20 +169,12 @@ class CanvasView: UIScrollView{
     }
     
     public func createEdgeView(parentNode:NodeModel, childNode:NodeModel, newEdge:EdgeModel){
-//        let newEdgeView = EdgeViewAndMenu(canvas: self, edge:newEdge, parentNodeView: self.NodeAndViewDict[parentNode], childNodeView: self.NodeAndViewDict[childNode])
-//        self.canvasContainer.insertSubview(newEdgeView, at: 1)
-//        self.NodeAndEdgeDict[newEdge] = newEdgeView
-        
         let newTESTEdgeView = TEST_EdgeView(parentNodeView: self.NodeAndViewDict[parentNode], childeNodeView: self.NodeAndViewDict[childNode])
         self.canvasContainer.layer.insertSublayer(newTESTEdgeView, at: 1)
         self.NodeAndeTESTEdgeDict[newEdge] = newTESTEdgeView
     }
     
     public func moveEdgeView(edges:[EdgeModel]){
-//        for edge in edges{
-//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else {continue}
-//            unwrappedEdgeView.redrawEdge()
-//        }
         for edge in edges{
             guard let unwrappedEdgeView = self.NodeAndeTESTEdgeDict[edge] else {continue}
             unwrappedEdgeView.createPath()
@@ -219,19 +213,6 @@ class CanvasView: UIScrollView{
         }
         
         return type(of: unwrappedNodeView) === AncestorNodeView.self
-    }
-    
-    public func activateEdgeView(edges:[EdgeModel], bool:Bool){
-//        for edge in edges{
-//            guard let unwrappedEdgeView = self.NodeAndEdgeDict[edge] else{
-//                continue
-//            }
-//            if bool{
-//                unwrappedEdgeView.showButton()
-//            }else{
-//                unwrappedEdgeView.hideButton()
-//            }
-//        }
     }
     
     public func EdgeViewWillDelete(edge:EdgeModel){
