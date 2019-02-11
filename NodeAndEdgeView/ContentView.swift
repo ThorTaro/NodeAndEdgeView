@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Container: UIView{
+class ContentView: UIView{
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .black

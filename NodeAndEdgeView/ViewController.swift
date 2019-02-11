@@ -9,9 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private let canvas = CanvasView()
-    private var nodeMap = NodeMapModel()
-    private var edgeMap = EdgeMapModel()
+    private let canvas = ScrollView()
+    private var nodeMap = WordViewModel()
+    private var edgeMap = RelationshipViewModel()
     private var menuView = MenuView()
 
     override func viewDidLoad() {
@@ -26,8 +26,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.canvas.adjustCanvas(frame:self.view.bounds)
+        self.canvas.initScrollView(frame:self.view.bounds)
     }
     
     private func setupCanvas(){
@@ -46,89 +45,89 @@ class ViewController: UIViewController {
     }
     
     private func setAncestor(){
-        let newAncestorNode = self.nodeMap.addNode(position: CGPoint.zero)
-        self.nodeMap.makeAncestor(ancestorNode: newAncestorNode)
-        self.canvas.createAncestorNodeView(node: newAncestorNode)
-        guard let ancestorNodeModel = self.nodeMap.getAncestor() else {
+        let newAncestorNode = self.nodeMap.appendNewWordModel(position: CGPoint.zero)
+        self.nodeMap.BecomeWordModelToThemeWord(targetWordModel: newAncestorNode)
+        self.canvas.createAncestorWordView(wordModel: newAncestorNode)
+        guard let ancestorNodeModel = self.nodeMap.getFirstCreatedWordModel() else {
             return
         }
-        self.canvas.moveAncestorCenter(node: ancestorNodeModel)
+        self.canvas.keepAncestorWordViewCenter(wordModel: ancestorNodeModel)
         self.nodeSelectedInView(view: self.canvas, selectedNode: ancestorNodeModel)
         self.tappedTextEdit()
     }
 }
 
 extension ViewController:nodeControlDelegate{
-    func edgeSelectedInView(view: CanvasView, edge: EdgeModel) {
+    func edgeSelectedInView(view: ScrollView, edge: RelationshipModel) {
         print("Edge tapped")
     }
     
-    func edgeDeletedInView(view: CanvasView, edge: EdgeModel) {
-        let deleteEdgeModel:[EdgeModel] = [edge]
-        self.edgeMap.deleteEdge(edges: deleteEdgeModel)
-        view.deleteEdgeView(edges: deleteEdgeModel)
+    func edgeDeletedInView(view: ScrollView, edge: RelationshipModel) {
+        let deleteEdgeModel:[RelationshipModel] = [edge]
+        self.edgeMap.removeRelationships(relationships: deleteEdgeModel)
+        view.deleteRelationshipViews(relationshipModels: deleteEdgeModel)
         self.nodeSelectedInView(view: self.canvas, selectedNode: nil)
     }
     
-    func nodeDeletedInView(view: CanvasView, node: NodeModel) {
-        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-            unwrappedSelectedNode.selected(bool: false)
+    func nodeDeletedInView(view: ScrollView, node: WordModel) {
+        if let unwrappedSelectedNode = self.nodeMap.getSelectedWordModel(){
+            unwrappedSelectedNode.toggleIsSelected(bool: false)
             self.menuView.hideMenu()
-            view.isEdgeCreationMode(bool: false)
-            view.isNodeSelectedMode(bool: false)
-            let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
-            view.deleteEdgeView(edges: relatedEdges)
-            self.edgeMap.deleteEdge(edges: relatedEdges)
+            view.toggleRelationshipCreationMode(bool: false)
+            view.toggleWordSelectedMode(bool: false)
+            let relatedEdges = self.edgeMap.searchTargetRelationships(containedWordModel: unwrappedSelectedNode)
+            view.deleteRelationshipViews(relationshipModels: relatedEdges)
+            self.edgeMap.removeRelationships(relationships: relatedEdges)
         }
-        self.nodeMap.deleteNode(node: node)
-        self.nodeMap.getNodesStatus()
-        self.edgeMap.getAllEdges()
+        self.nodeMap.deleteWordModel(targetWordModel: node)
+        self.nodeMap.getAllWordModelStatus()
+        self.edgeMap.getAllRelationships()
     }
     
-    func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
-        view.moveEdgeView(edges: self.edgeMap.searchEdges(containedNode: movedNode))
+    func nodeMovedInView(view: ScrollView, movedNode: WordModel) {
+        view.moveRelationshipView(relationshipModels: self.edgeMap.searchTargetRelationships(containedWordModel: movedNode))
     }
     
-    func createEdgeInView(view: CanvasView, childNode: NodeModel) {
-        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
-            let newEdge = EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)
-            if self.edgeMap.addEdge(newEdge: newEdge){
-                self.edgeMap.getAllEdges()
-                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode, newEdge: newEdge)
+    func createEdgeInView(view: ScrollView, childNode: WordModel) {
+        if let unwrappedParentNode = self.nodeMap.getSelectedWordModel(){
+            let newEdge = RelationshipModel(scrWordModel: unwrappedParentNode, dstWordModel: childNode)
+            if self.edgeMap.addRelationship(newRelationship: newEdge){
+                self.edgeMap.getAllRelationships()
+                view.createRelationshipView(src: unwrappedParentNode, with: childNode, newRelationshipModel: newEdge)
             }
         }else{
             print("Edge creation failed")
         }
     }
     
-    func isEdgeLoopedInView(view: CanvasView, childNode: NodeModel) -> Bool {
-        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(), unwrappedParentNode.getID() == childNode.getID(){
+    func isEdgeLoopedInView(view: ScrollView, childNode: WordModel) -> Bool {
+        if let unwrappedParentNode = self.nodeMap.getSelectedWordModel(), unwrappedParentNode.getID() == childNode.getID(){
             return true
         }
         return false
     }
     
-    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
+    func nodeSelectedInView(view: ScrollView, selectedNode: WordModel?) {
         if let unwrappedSelectedNode = selectedNode{
-            unwrappedSelectedNode.selected(bool: true)
-            self.menuView.showMenu(isAncestor: self.nodeMap.isAncestor(node: unwrappedSelectedNode))
-            self.nodeMap.getNodesStatus()
-            view.isNodeSelectedMode(bool: true)
+            unwrappedSelectedNode.toggleIsSelected(bool: true)
+            self.menuView.showMenu(isAncestor: self.nodeMap.getIsThemeWordStatus(targetWordModel: unwrappedSelectedNode))
+            self.nodeMap.getAllWordModelStatus()
+            view.toggleWordSelectedMode(bool: true)
         }else{
-            if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-                unwrappedSelectedNode.selected(bool: false)
+            if let unwrappedSelectedNode = self.nodeMap.getSelectedWordModel(){
+                unwrappedSelectedNode.toggleIsSelected(bool: false)
                 self.menuView.hideMenu()
-                self.nodeMap.getNodesStatus()
-                view.isNodeSelectedMode(bool: false)
-                view.isEdgeCreationMode(bool: false)
-                view.SelectNode(node: unwrappedSelectedNode, isSelected: false)
+                self.nodeMap.getAllWordModelStatus()
+                view.toggleWordSelectedMode(bool: false)
+                view.toggleRelationshipCreationMode(bool: false)
+                view.toggleWordViewState(targetWordModel: unwrappedSelectedNode, isSelected: false)
             }
         }
     }
     
-    func createNodeInView(view: CanvasView, position: CGPoint) {
-        let newNode = self.nodeMap.addNode(position: position)
-        view.createNodeView(node: newNode)
+    func createNodeInView(view: ScrollView, position: CGPoint) {
+        let newNode = self.nodeMap.appendNewWordModel(position: position)
+        view.createWordView(newWordModel: newNode)
     }
 }
 
@@ -144,11 +143,11 @@ extension ViewController:MenuViewDelegate{
                 return
             }
             
-            guard let unwrappedSelectedNode = weakself.nodeMap.searchSelectedNode() else{
+            guard let unwrappedSelectedNode = weakself.nodeMap.getSelectedWordModel() else{
                 return
             }
-            unwrappedSelectedNode.setText(text: text)
-            weakself.canvas.setTextInNodeView(node: unwrappedSelectedNode, text: text)
+            unwrappedSelectedNode.setWord(newWord: text)
+            weakself.canvas.setWordInWordView(wordModel: unwrappedSelectedNode, newWord: text)
             weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
         })
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self](action) -> Void in
@@ -167,12 +166,12 @@ extension ViewController:MenuViewDelegate{
     }
     
     func tappedDeleteNode() {
-        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-            self.canvas.deleteNodeView(node:unwrappedSelectedNode)
+        if let unwrappedSelectedNode = self.nodeMap.getSelectedWordModel(){
+            self.canvas.deleteWordView(selectedWordModel:unwrappedSelectedNode)
         }
     }
     
     func tappedCreateEdge() {
-        self.canvas.isEdgeCreationMode(bool: true)
+        self.canvas.toggleRelationshipCreationMode(bool: true)
     }
 }

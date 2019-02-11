@@ -8,10 +8,10 @@
 
 import UIKit
 
-class AncestorNodeView: AbstractNodeView {
-    required init(view: CanvasView, node: NodeModel) {
-        super.init(view: view, node: node)
-        self.defaultHeight = 75
+class ThemeWordView: AbstractWordView {
+    required init(targetView: ScrollView, wordModel: WordModel) {
+        super.init(targetView: targetView, wordModel: wordModel)
+        self.defaultViewHeight = 75
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,10 +30,10 @@ class AncestorNodeView: AbstractNodeView {
         self.skinLayer.borderWidth = 0
         self.skinLayer.path = self.skinPath.cgPath
         self.layer.addSublayer(self.skinLayer)
-        self.view.nodeMoved(node: self.node)
+        self.targetView.wordViewMoved(movedWordModel: self.wordModel)
     }
     
-    override func changeNodeViewColor(isSelected:Bool){
+    override func toggleWordViewColor(isSelected:Bool){
         if isSelected == true{
             self.skinLayer.strokeColor = UIColor.yellow.cgColor
             self.skinLayer.fillColor = UIColor.yellow.cgColor
@@ -46,16 +46,16 @@ class AncestorNodeView: AbstractNodeView {
     override func setText(text: String) {
         self.currentText = text
         self.textLabel.text = self.currentText
-        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultHeight
+        let adjustedWidth = text.getWidthOfString(usingFont: self.textLabel.font) + self.defaultViewHeight
         
-        if adjustedWidth <= self.defaultWidth{
-            self.currentWidth = self.defaultWidth
-        }else if adjustedWidth >  self.defaultWidth, adjustedWidth <= self.maxWidth{
-            self.currentWidth = adjustedWidth
-        }else if adjustedWidth > self.maxWidth{
-            self.currentWidth = self.maxWidth
+        if adjustedWidth <= self.defaultViewWidth{
+            self.currentViewWidth = self.defaultViewWidth
+        }else if adjustedWidth >  self.defaultViewWidth, adjustedWidth <= self.maxViewWidth{
+            self.currentViewWidth = adjustedWidth
+        }else if adjustedWidth > self.maxViewWidth{
+            self.currentViewWidth = self.maxViewWidth
         }
-        self.frame.origin.x = self.view.getCanvasLimitSize().midX - self.currentWidth / 2 
+        self.frame.origin.x = self.targetView.getContentViewMaxSize().midX - self.currentViewWidth / 2 
         self.setNeedsLayout()
     }
 }
