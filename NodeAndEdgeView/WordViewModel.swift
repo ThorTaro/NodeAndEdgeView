@@ -63,4 +63,18 @@ struct WordViewModel {
         }
         return false
     }
+    
+    public func updateWordModelPosition(targetWordModel:WordModel, newPosition:CGPoint){
+        if let i = self.wordModels.index(of:targetWordModel){
+            self.wordModels[i].setPosition(position: newPosition)
+        }
+    }
+    
+    public func getWordModelPosition(targetWordModel:WordModel) -> CGPoint{
+        if let i = self.wordModels.index(of:targetWordModel){
+            return self.wordModels[i].getPosition()
+        }else{
+            return CGPoint.zero
+        }
+    }
 }

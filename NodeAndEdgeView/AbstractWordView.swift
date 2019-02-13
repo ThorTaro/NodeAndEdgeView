@@ -29,10 +29,10 @@ class AbstractWordView: UIView{
     public var currentViewWidth:CGFloat = 0.0
     public var currentText = String()
     
-    required init(targetView:ScrollView, wordModel:WordModel) {
+    required init(targetView:ScrollView, wordModel:WordModel, position:CGPoint) {
         self.targetView = targetView
         self.wordModel = wordModel
-        super.init(frame: CGRect(origin: self.wordModel.getPosition() , size: CGSize.zero))
+        super.init(frame: CGRect(origin: position, size: CGSize.zero))
         self.currentViewWidth = self.defaultViewWidth
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
         self.addGestureRecognizer(longPress)
@@ -44,17 +44,17 @@ class AbstractWordView: UIView{
     }
     
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
-        if !self.targetView.getWordViewSelectedMode(), recognizer.state == .began{
+        if self.targetView.getModeStatus() == .normal, recognizer.state == .began{
             print("Node ID:\(self.wordModel.getID()) selected")
             self.targetView.wordViewSelected(selectedWordModel: self.wordModel, to: true)
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !self.targetView.getWordViewSelectedMode(){
+        if self.targetView.getModeStatus() == .normal{
             self.superview?.bringSubviewToFront(self)
-        }else{
-            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? AbstractWordView, !self.targetView.isRelationshipLooped(relationshipWith: touchedView.wordModel){
+        }else if self.targetView.getModeStatus() == .relationshipCreation{
+            if let touchesLocation = touches.first?.location(in: self), let touchedView = self.hitTest(touchesLocation, with: event) as? AbstractWordView, !self.targetView.isRelationshipLooped(dst: touchedView.wordModel){
                 self.targetView.createRelationship(with: touchedView.wordModel)
             }
         }
@@ -95,8 +95,7 @@ class AbstractWordView: UIView{
     private func adjustInsideContentView(delta:CGPoint){
         self.frame.origin.x -= delta.x
         self.frame.origin.y -= delta.y
-        self.wordModel.setPosition(position: CGPoint(x: self.frame.origin.x,
-                                                     y: self.frame.origin.y))
+        self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: self.frame.origin)
     }
     
     private func errorOutsideContentView(createdViewFrame:CGRect) -> CGPoint{

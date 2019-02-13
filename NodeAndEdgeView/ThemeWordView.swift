@@ -9,8 +9,8 @@
 import UIKit
 
 class ThemeWordView: AbstractWordView {
-    required init(targetView: ScrollView, wordModel: WordModel) {
-        super.init(targetView: targetView, wordModel: wordModel)
+    required init(targetView: ScrollView, wordModel: WordModel, position: CGPoint) {
+        super.init(targetView: targetView, wordModel: wordModel, position: position)
         self.defaultViewHeight = 75
     }
     
@@ -30,7 +30,7 @@ class ThemeWordView: AbstractWordView {
         self.skinLayer.borderWidth = 0
         self.skinLayer.path = self.skinPath.cgPath
         self.layer.addSublayer(self.skinLayer)
-        self.targetView.wordViewMoved(movedWordModel: self.wordModel)
+        self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: self.frame.origin)
     }
     
     override func toggleWordViewColor(isSelected:Bool){
