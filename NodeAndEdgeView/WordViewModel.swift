@@ -17,7 +17,7 @@ struct WordViewModel {
         return newWordModel
     }
     
-    mutating func deleteWordModel(targetWordModel:WordModel){
+    mutating func removeWordModel(targetWordModel:WordModel){
         if let i = self.wordModels.index(of:targetWordModel){
             self.wordModels.remove(at: i)
             print("ID:\(targetWordModel.getID()) deleted")
@@ -51,13 +51,17 @@ struct WordViewModel {
         return self.wordModels.first
     }
     
-    public func BecomeWordModelToThemeWord(targetWordModel:WordModel){
+    public func wordModelToThemeWord(targetWordModel:WordModel){
         if let i = self.wordModels.index(of:targetWordModel){
             self.wordModels[i].becomeThemeWord()
         }
     }
     
-    public func getIsThemeWordStatus(targetWordModel:WordModel) -> Bool{
+    public func getIsThemeWordStatus(targetWordModel:WordModel?) -> Bool{
+        guard let targetWordModel = targetWordModel else{
+            return false
+        }
+        
         if let i = self.wordModels.index(of:targetWordModel){
             return self.wordModels[i].getIsThemeWordStatus()
         }

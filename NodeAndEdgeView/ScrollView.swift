@@ -13,14 +13,14 @@ protocol WordControlDelegate:NSObjectProtocol{
     func createWord(view:ScrollView, position:CGPoint)
     func wordSelected(view:ScrollView, selectedWord:WordModel?)
     func wordMoved(view:ScrollView, movedWord:WordModel, newPosition:CGPoint)
-    func wordDeleted(view:ScrollView,targetWord:WordModel)
+    func wordRemoved(view:ScrollView,targetWord:WordModel)
 }
 
 protocol RelationshipControlDelegate:NSObjectProtocol{
     func isRelationshipLooped(view:ScrollView, dst:WordModel) -> Bool
     func createRelationship(view:ScrollView, dst:WordModel)
-    func relationshipDeleted(view:ScrollView, targetRelationship:RelationshipModel)
-    func relationshipSelected(view:ScrollView, targetRelationship:RelationshipModel)
+    func relationshipRemoved(view:ScrollView, targetRelationship:RelationshipModel)
+    func relationshipSelected(view:ScrollView, targetRelationship:RelationshipModel?)
 }
 
 enum ModeType{
@@ -97,14 +97,14 @@ class ScrollView: UIScrollView{
         self.contentView.bringSubviewToFront(newWordView)
     }
     
-    public func deleteWordView(selectedWordModel:WordModel){
+    public func removeWordView(selectedWordModel:WordModel){
         if let wordView = self.wordModelAndViewDict[selectedWordModel]{
             wordView.removeWordView()
             self.wordModelAndViewDict.removeValue(forKey: selectedWordModel)
         }
         
         if let wordDelegate = self.wordDelegate{
-            wordDelegate.wordDeleted(view: self, targetWord: selectedWordModel)
+            wordDelegate.wordRemoved(view: self, targetWord: selectedWordModel)
         }
     }
     
@@ -132,13 +132,13 @@ class ScrollView: UIScrollView{
         }
     }
     
-    public func toggleWordSelectedMode(_ bool:Bool){
-        if bool{
-            self.mode = .wordSelected
-        }else{
-            self.mode = .normal
-        }
-    }
+//    public func toggleWordSelectedMode(_ bool:Bool){
+//        if bool{
+//            self.mode = .wordSelected
+//        }else{
+//            self.mode = .normal
+//        }
+//    }
     
     public func toggleWordViewState(targetWordModel:WordModel, isSelected:Bool){
         if let wordView = self.wordModelAndViewDict[targetWordModel]{
@@ -149,6 +149,12 @@ class ScrollView: UIScrollView{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let wordDelegate = self.wordDelegate{
             wordDelegate.wordSelected(view: self, selectedWord: nil)
+        }
+        
+        // TODO
+        // ここにRelationshipViewをLongPressしてたときにフォーカスを解除する方法を記述する(内容は上と多分変わらない)
+        if let relationshipDelegate = self.relationshipDelegate, self.mode == .ralationshipSelected{
+            relationshipDelegate.relationshipSelected(view: self, targetRelationship: nil)
         }
     }
     
@@ -166,13 +172,17 @@ class ScrollView: UIScrollView{
         }
     }
     
-    public func toggleRelationshipCreationMode(_ bool:Bool){
-        if bool{
-            self.mode = .relationshipCreation
-        }else{
-            self.mode = .normal
-        }
+//    public func toggleRelationshipCreationMode(_ bool:Bool){
+//        if bool{
+//            self.mode = .relationshipCreation
+//        }else{
+//            self.mode = .normal
+//        }
+//    }
+    public func changeModeType(mode:ModeType){
+        self.mode = mode
     }
+    
     
     public func getModeStatus() -> ModeType{
         return self.mode
@@ -221,7 +231,7 @@ class ScrollView: UIScrollView{
     
     public func relationshipViewTappedDelete(targetRelationship:RelationshipModel){ // まだ使われていない疑惑
         if let relationshioDelegate = self.relationshipDelegate{
-            relationshioDelegate.relationshipDeleted(view: self, targetRelationship: targetRelationship)
+            relationshioDelegate.relationshipRemoved(view: self, targetRelationship: targetRelationship)
         }
     }
 }
