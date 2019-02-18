@@ -208,15 +208,15 @@ extension ViewController:RelationshipControlDelegate{
 }
 
 extension ViewController:NewMenuDelegate{
-    func WordEdit() {
-        print("hoge")
+    func EditWord() {
+        print("Edit")
     }
     
     func CreateRelationship() {
-        print("fuga")
+        print("Relationship")
     }
     
     func Remove() {
-        print("hogehoge")
+        print("Remove")
     }
 }
