@@ -71,7 +71,7 @@ class ViewController: UIViewController {
 
 extension ViewController:MenuViewDelegate{
     func tappedTextEdit() {
-        let AlertController = UIAlertController(title: "Text", message: "", preferredStyle: .alert)
+        let AlertController = UIAlertController(title: "Word", message: "", preferredStyle: .alert)
         let OKAlertAction = UIAlertAction(title: "OK", style: .default, handler:{[weak AlertController, weak self](action) -> Void in
             guard let text = AlertController?.textFields?.first?.text else{
                 return
@@ -81,11 +81,11 @@ extension ViewController:MenuViewDelegate{
                 return
             }
             
-            guard let unwrappedSelectedNode = weakself.wordViewModel.getSelectedWordModel() else{
+            guard let selectedWordModel = weakself.wordViewModel.getSelectedWordModel() else{
                 return
             }
-            unwrappedSelectedNode.setWord(newWord: text)
-            weakself.scrollview.setWordInWordView(wordModel: unwrappedSelectedNode, newWord: text)
+            selectedWordModel.setWord(newWord: text)
+            weakself.scrollview.setWordInWordView(wordModel: selectedWordModel, newWord: text)
             weakself.wordSelected(view: weakself.scrollview, selectedWord: nil)
         })
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self](action) -> Void in
@@ -209,14 +209,48 @@ extension ViewController:RelationshipControlDelegate{
 
 extension ViewController:NewMenuDelegate{
     func EditWord() {
-        print("Edit")
+        let AlertController = UIAlertController(title: "Edit Word", message: "", preferredStyle: .alert)
+        let OKAlertAction = UIAlertAction(title: "OK", style: .default, handler:{[weak AlertController, weak self](action) -> Void in
+            guard let text = AlertController?.textFields?.first?.text else{
+                return
+            }
+            
+            guard let weakself = self else{
+                return
+            }
+            
+            guard let selectedWordModel = weakself.wordViewModel.getSelectedWordModel() else{
+                return
+            }
+            selectedWordModel.setWord(newWord: text)
+            weakself.scrollview.setWordInWordView(wordModel: selectedWordModel, newWord: text)
+            weakself.wordSelected(view: weakself.scrollview, selectedWord: nil)
+        })
+        let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self](action) -> Void in
+            guard let weakself = self else{
+                return
+            }
+            weakself.wordSelected(view: weakself.scrollview, selectedWord: nil)
+        })
+        AlertController.addTextField{textField in
+            textField.placeholder = "Word"
+            textField.keyboardAppearance  = .dark
+        }
+        AlertController.addAction(OKAlertAction)
+        AlertController.addAction(CancelAction)
+        self.present(AlertController, animated: true, completion: nil)
     }
     
     func CreateRelationship() {
-        print("Relationship")
+        self.scrollview.changeModeType(mode: .relationshipCreation)
     }
     
     func Remove() {
-        print("Remove")
+        // TODO
+        // 消すのはWordModelに限らないので，場合分けが必要
+        // というか．Relationshipに削除とか選択って概念がないから．そこから作らないといけない
+        if let selectedWordModel = self.wordViewModel.getSelectedWordModel(){
+            self.scrollview.removeWordView(selectedWordModel:selectedWordModel)
+        }
     }
 }
