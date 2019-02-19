@@ -8,9 +8,9 @@
 
 import UIKit
 
-class DescendantNodeView: AbstractNodeView {
-    required init(view: CanvasView, node: NodeModel) {
-        super.init(view: view, node: node)
+class WordView: AbstractWordView {
+    required init(targetView: ScrollView, wordModel: WordModel, position: CGPoint) {
+        super.init(targetView: targetView, wordModel: wordModel, position: position)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
         self.addGestureRecognizer(pan)
     }
@@ -20,22 +20,21 @@ class DescendantNodeView: AbstractNodeView {
     }
     
     @objc func panHandler(recongnizer:UIPanGestureRecognizer){
-        if !self.view.getSelectedModeStatus(){
+        if self.targetView.getModeStatus() == .normal{
             if recongnizer.state == .began{
                 self.previousPosition = recongnizer.location(in: self.superview)
                 self.superview?.bringSubviewToFront(self)
-            }else if let unwrappedPreviousPanPosition = self.previousPosition,recongnizer.state == .changed{
+            }else if let previousPosition = self.previousPosition,recongnizer.state == .changed{
                 let movedPosition = recongnizer.location(in: self.superview)
-                let deltaX = movedPosition.x - unwrappedPreviousPanPosition.x
-                let deltaY = movedPosition.y - unwrappedPreviousPanPosition.y
-                let newPosition = CGPoint(x: self.frame.origin.x + deltaX,
-                                          y: self.frame.origin.y + deltaY)
-                if self.ableToMove(newPosition: newPosition){
-                    self.frame.origin.x = newPosition.x
-                    self.frame.origin.y = newPosition.y
+                let deltaX = movedPosition.x - previousPosition.x
+                let deltaY = movedPosition.y - previousPosition.y
+                let newViewFrameOrigin = CGPoint(x: self.frame.origin.x + deltaX,
+                                                 y: self.frame.origin.y + deltaY)
+                if self.isAbleToMove(newPosition: newViewFrameOrigin){
+                    self.frame.origin.x = newViewFrameOrigin.x
+                    self.frame.origin.y = newViewFrameOrigin.y
                     self.previousPosition = movedPosition
-                    self.node.setPosition(position: newPosition)
-                    self.view.nodeMoved(node: self.node)
+                    self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: newViewFrameOrigin)
                 }
             }
         }
@@ -54,10 +53,10 @@ class DescendantNodeView: AbstractNodeView {
         self.skinLayer.borderWidth = 0
         self.skinLayer.path = self.skinPath.cgPath
         self.layer.addSublayer(self.skinLayer)
-        self.view.nodeMoved(node: self.node)
+        self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: self.frame.origin)
     }
     
-    override func changeNodeViewColor(isSelected:Bool){
+    override func toggleWordViewColor(isSelected:Bool){
         if isSelected == true{
             self.skinLayer.strokeColor = UIColor.yellow.cgColor
             self.skinLayer.fillColor = UIColor.yellow.cgColor

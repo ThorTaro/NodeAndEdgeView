@@ -8,17 +8,17 @@
 
 import UIKit
 
-class NodeModel:Equatable, Hashable{
+class WordModel:Equatable, Hashable{
     private let id = NSUUID()
-    private var text = String()
+    private var word = String()
     private var isSelected:Bool = false
-    private var isAncestor:Bool = false
+    private var isThemeWord:Bool = false
     
     internal var hashValue: Int{
         return self.id.hashValue
     }
     
-    static func == (lhs: NodeModel, rhs: NodeModel) -> Bool {
+    static func == (lhs: WordModel, rhs: WordModel) -> Bool {
         return lhs.id.isEqual(rhs.id)
     }
     
@@ -36,7 +36,7 @@ class NodeModel:Equatable, Hashable{
         self.position = position
     }
     
-    public func selected(bool:Bool){
+    public func toggleIsSelected(bool:Bool){
         self.isSelected = bool
     }
     
@@ -44,23 +44,23 @@ class NodeModel:Equatable, Hashable{
         return self.id.uuidString
     }
     
-    public func getStatus() -> Bool{
+    public func getIsSelectedStatus() -> Bool{
         return self.isSelected
     }
     
-    public func setText(text:String){
-        self.text = text
+    public func setWord(newWord:String){
+        self.word = newWord
     }
     
-    public func getText() -> String{
-        return self.text
+    public func getWord() -> String{
+        return self.word
     }
     
-    public func becomeAncestor(){
-        self.isAncestor = true
+    public func becomeThemeWord(){
+        self.isThemeWord = true
     }
     
-    public func getAttribute() -> Bool{
-        return self.isAncestor
+    public func getIsThemeWordStatus() -> Bool{
+        return self.isThemeWord
     }
 }

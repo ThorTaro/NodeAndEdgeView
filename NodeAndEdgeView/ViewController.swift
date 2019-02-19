@@ -9,130 +9,137 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private let canvas = CanvasView()
-    private var nodeMap = NodeMapModel()
-    private var edgeMap = EdgeMapModel()
-    private var menuForDescendant = MenuView()
+    private let scrollview = ScrollView()
+    private var wordViewModel = WordViewModel()
+    private var relationshipViewModel = RelationshipViewModel()
+    private var newMenuView = MenuView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupCanvas()
-        self.setupMenu()
+        self.setMenu()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.setAncestor()
+        self.setTheme()
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.canvas.adjustCanvas(frame:self.view.bounds)
+        self.scrollview.initScrollView(frame:self.view.bounds, delegate: self)
     }
     
     private func setupCanvas(){
         self.view.backgroundColor = .white
-        self.canvas.nodeController = self
-        self.view.addSubview(self.canvas)
+        self.view.addSubview(self.scrollview)
     }
     
-    private func setupMenu(){
-        self.menuForDescendant = MenuView(frame: CGRect(x: self.view.bounds.width,
-                                               y: self.view.frame.origin.y,
-                                               width: self.view.bounds.width / 4,
-                                               height: self.view.bounds.height / 2))
-        self.menuForDescendant.sideMenuController = self
-        self.view.addSubview(self.menuForDescendant)
+    private func setMenu(){
+        self.newMenuView = MenuView(frame: CGRect(x: self.view.bounds.width,
+                                                     y: self.view.bounds.origin.y,
+                                                     width: self.view.bounds.width / 4,
+                                                     height: self.view.bounds.height / 2))
+        self.newMenuView.setDelegate(delegate: self)
+        self.view.addSubview(self.newMenuView)
     }
     
-    private func setAncestor(){
-        let newAncestorNode = self.nodeMap.addNode(position: CGPoint.zero)
-        self.nodeMap.makeAncestor(ancestorNode: newAncestorNode)
-        self.canvas.createAncestorNodeView(node: newAncestorNode)
-        guard let ancestorNodeModel = self.nodeMap.getAncestor() else {
+    private func setTheme(){
+        let newThemeWordModel = self.wordViewModel.appendNewWordModel(position: CGPoint.zero)
+        self.wordViewModel.wordModelToThemeWord(targetWordModel: newThemeWordModel)
+        self.scrollview.createThemeWordView(wordModel: newThemeWordModel, position: self.wordViewModel.getWordModelPosition(targetWordModel: newThemeWordModel))
+        guard let themeWordModel = self.wordViewModel.getFirstCreatedWordModel() else {
             return
         }
-        self.canvas.moveAncestorCenter(node: ancestorNodeModel)
-        self.nodeSelectedInView(view: self.canvas, selectedNode: ancestorNodeModel)
-        self.tappedTextEdit()
+        self.scrollview.keepThemeWordViewCenter(wordModel: themeWordModel)
+        self.wordSelected(view: self.scrollview, selectedWord: themeWordModel)
+        self.EditWord()
     }
 }
 
-extension ViewController:nodeControlDelegate{
-    func edgeDeletedInView(view: CanvasView, edge: EdgeModel) {
-        let deleteEdgeModel:[EdgeModel] = [edge]
-        self.edgeMap.deleteEdge(edges: deleteEdgeModel)
-        view.deleteEdgeView(edges: deleteEdgeModel)
-        self.nodeSelectedInView(view: self.canvas, selectedNode: nil)
+
+extension ViewController:WordControlDelegate{
+    func createWord(view: ScrollView, position: CGPoint) {
+        let newWord = self.wordViewModel.appendNewWordModel(position: position)
+        view.createWordView(newWordModel: newWord, position: self.wordViewModel.getWordModelPosition(targetWordModel: newWord))
     }
     
-    func nodeDeletedInView(view: CanvasView, node: NodeModel) {
-        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-            unwrappedSelectedNode.selected(bool: false)
-            self.menuForDescendant.hideMenu()
-            view.isEdgeCreationMode(bool: false)
-            view.isNodeSelectedMode(bool: false)
-            let relatedEdges = self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode)
-            view.deleteEdgeView(edges: relatedEdges)
-            self.edgeMap.deleteEdge(edges: relatedEdges)
+    func wordSelected(view: ScrollView, selectedWord: WordModel?) {
+        if let targetUnselectedWord = selectedWord{
+            targetUnselectedWord.toggleIsSelected(bool: true)
+            self.newMenuView.changeMenuType(type: self.wordViewModel.getIsThemeWordStatus(targetWordModel: targetUnselectedWord) ? .Theme:.Word)
+            self.newMenuView.showMenu()
+            
+            view.changeModeType(mode: .wordSelected)
+        }else{
+            if let targetSelectedWord = self.wordViewModel.getSelectedWordModel(){
+                targetSelectedWord.toggleIsSelected(bool: false)
+                self.newMenuView.hideMenu()
+                view.changeModeType(mode: .normal)
+                view.toggleWordViewState(targetWordModel: targetSelectedWord, isSelected: false)
+            }
         }
-        self.nodeMap.deleteNode(node: node)
-        self.nodeMap.getNodesStatus()
-        self.edgeMap.getAllEdges()
     }
     
-    func nodeMovedInView(view: CanvasView, movedNode: NodeModel) {
-        view.moveEdgeView(edges: self.edgeMap.searchEdges(containedNode: movedNode))
+    func wordMoved(view: ScrollView, movedWord: WordModel, newPosition: CGPoint) {
+        self.wordViewModel.updateWordModelPosition(targetWordModel: movedWord, newPosition: newPosition)
+        view.moveRelationshipView(relationshipModels: self.relationshipViewModel.getRelatedRelationships(targetWordModel: movedWord))
+    }
+
+    
+    func wordRemoved(view: ScrollView, targetWord: WordModel) {        
+        targetWord.toggleIsSelected(bool: false)
+        let relatedRelationships = self.relationshipViewModel.getRelatedRelationships(targetWordModel: targetWord)
+        self.relationshipRemoved(view: view, targetRelationships: relatedRelationships)
+        view.removeWordView(selectedWordModel: targetWord)
+        self.wordViewModel.removeWordModel(targetWordModel: targetWord)
+        view.changeModeType(mode: .normal)
+    }
+}
+
+extension ViewController:RelationshipControlDelegate{
+    func isRelationshipLooped(view: ScrollView, dst: WordModel) -> Bool {
+        if let unwrappedParentNode = self.wordViewModel.getSelectedWordModel(), unwrappedParentNode.getID() == dst.getID(){
+            return true
+        }
+        return false
     }
     
-    func createEdgeInView(view: CanvasView, childNode: NodeModel) {
-        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(){
-            let newEdge = EdgeModel(parentNode: unwrappedParentNode, childNode: childNode)
-            if self.edgeMap.addEdge(newEdge: newEdge){
-                self.edgeMap.getAllEdges()
-                view.createEdgeView(parentNode: unwrappedParentNode, childNode: childNode, newEdge: newEdge)
+    func createRelationship(view: ScrollView, dst: WordModel) {
+        if let srcWordModel = self.wordViewModel.getSelectedWordModel(){
+            let newRelationshipModel = RelationshipModel(scrWordModel: srcWordModel, dstWordModel: dst)
+            if self.relationshipViewModel.addRelationship(newRelationship: newRelationshipModel){
+                view.createRelationshipView(src: srcWordModel, dst: dst, newRelationshipModel: newRelationshipModel)
             }
         }else{
             print("Edge creation failed")
         }
     }
     
-    func isEdgeLoopedInView(view: CanvasView, childNode: NodeModel) -> Bool {
-        if let unwrappedParentNode = self.nodeMap.searchSelectedNode(), unwrappedParentNode.getID() == childNode.getID(){
-            return true
-        }
-        return false
+    func relationshipRemoved(view: ScrollView, targetRelationships: [RelationshipModel]) {
+        view.removeRelationshipViews(relationshipModels: targetRelationships)
+        view.changeModeType(mode: .normal)
+        self.relationshipViewModel.removeRelationships(relationships: targetRelationships)
     }
     
-    func nodeSelectedInView(view: CanvasView, selectedNode: NodeModel?) {
-        if let unwrappedSelectedNode = selectedNode{
-            unwrappedSelectedNode.selected(bool: true)
-            self.menuForDescendant.showMenu(isAncestor: self.nodeMap.isAncestor(node: unwrappedSelectedNode))
-            self.nodeMap.getNodesStatus()
-            view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: true)
-            view.isNodeSelectedMode(bool: true)
+    func relationshipSelected(view: ScrollView, targetRelationship: RelationshipModel?) {
+        if let targetRelationship = targetRelationship{
+            targetRelationship.toggleIsSelected(bool: true)
+            view.changeModeType(mode: .ralationshipSelected)
+            self.newMenuView.changeMenuType(type: .Relationship)
+            self.newMenuView.showMenu()
         }else{
-            if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-                view.activateEdgeView(edges: self.edgeMap.searchEdges(containedNode: unwrappedSelectedNode), bool: false)
-                unwrappedSelectedNode.selected(bool: false)
-                self.menuForDescendant.hideMenu()
-                self.nodeMap.getNodesStatus()
-                view.isNodeSelectedMode(bool: false)
-                view.isEdgeCreationMode(bool: false)
-                view.SelectNode(node: unwrappedSelectedNode, isSelected: false)
+            if let selectedRelationshipModel = self.relationshipViewModel.getSelectedRelationshipModel(){
+                selectedRelationshipModel.toggleIsSelected(bool: false)
+                self.newMenuView.hideMenu()
+                view.changeModeType(mode: .normal)
             }
         }
     }
-    
-    func createNodeInView(view: CanvasView, position: CGPoint) {
-        let newNode = self.nodeMap.addNode(position: position)
-        view.createNodeView(node: newNode)
-    }
 }
 
-extension ViewController:MenuViewDelegate{
-    func tappedTextEdit() {
-        let AlertController = UIAlertController(title: "Text", message: "", preferredStyle: .alert)
+extension ViewController:NewMenuDelegate{
+    func EditWord() {
+        let AlertController = UIAlertController(title: "Edit Word", message: "", preferredStyle: .alert)
         let OKAlertAction = UIAlertAction(title: "OK", style: .default, handler:{[weak AlertController, weak self](action) -> Void in
             guard let text = AlertController?.textFields?.first?.text else{
                 return
@@ -142,21 +149,21 @@ extension ViewController:MenuViewDelegate{
                 return
             }
             
-            guard let unwrappedSelectedNode = weakself.nodeMap.searchSelectedNode() else{
+            guard let selectedWordModel = weakself.wordViewModel.getSelectedWordModel() else{
                 return
             }
-            unwrappedSelectedNode.setText(text: text)
-            weakself.canvas.setTextInNodeView(node: unwrappedSelectedNode, text: text)
-            weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
+            selectedWordModel.setWord(newWord: text)
+            weakself.scrollview.setWordInWordView(wordModel: selectedWordModel, newWord: text)
+            weakself.wordSelected(view: weakself.scrollview, selectedWord: nil)
         })
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {[weak self](action) -> Void in
             guard let weakself = self else{
                 return
             }
-            weakself.nodeSelectedInView(view: weakself.canvas, selectedNode: nil)
+            weakself.wordSelected(view: weakself.scrollview, selectedWord: nil)
         })
         AlertController.addTextField{textField in
-            textField.placeholder = "Text"
+            textField.placeholder = "Word"
             textField.keyboardAppearance  = .dark
         }
         AlertController.addAction(OKAlertAction)
@@ -164,13 +171,25 @@ extension ViewController:MenuViewDelegate{
         self.present(AlertController, animated: true, completion: nil)
     }
     
-    func tappedDeleteNode() {
-        if let unwrappedSelectedNode = self.nodeMap.searchSelectedNode(){
-            self.canvas.deleteNodeView(node:unwrappedSelectedNode)
-        }
+    func CreateRelationship() {
+        self.scrollview.changeModeType(mode: .relationshipCreation)
     }
     
-    func tappedCreateEdge() {
-        self.canvas.isEdgeCreationMode(bool: true)
+    func Remove(removeType:MenuType) {
+        switch removeType{
+        case .Word:
+            if let selectedWordModel = self.wordViewModel.getSelectedWordModel(){
+                self.wordRemoved(view: self.scrollview, targetWord: selectedWordModel)
+            }
+        case .Relationship:
+            if let selectedRelationshipModel = self.relationshipViewModel.getSelectedRelationshipModel(){
+                let removeRelationshipList:[RelationshipModel] = [selectedRelationshipModel]
+                self.relationshipRemoved(view: self.scrollview, targetRelationships: removeRelationshipList)
+            }
+        case .Theme:
+            print("ERROR: Theme word cannot be removed")
+            return
+        }
+        self.newMenuView.hideMenu()
     }
 }
