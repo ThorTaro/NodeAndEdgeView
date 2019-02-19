@@ -45,7 +45,6 @@ class AbstractWordView: UIView{
     
     @objc func longPressHandler(recognizer:UILongPressGestureRecognizer){
         if self.targetView.getModeStatus() == .normal, recognizer.state == .began{
-            print("Node ID:\(self.wordModel.getID()) selected")
             self.targetView.wordViewSelected(selectedWordModel: self.wordModel, to: true)
         }
     }

@@ -20,7 +20,6 @@ struct WordViewModel {
     mutating func removeWordModel(targetWordModel:WordModel){
         if let i = self.wordModels.index(of:targetWordModel){
             self.wordModels.remove(at: i)
-            print("ID:\(targetWordModel.getID()) deleted")
         }
     }
     

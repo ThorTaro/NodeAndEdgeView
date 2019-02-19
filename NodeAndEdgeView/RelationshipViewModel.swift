@@ -16,7 +16,6 @@ struct RelationshipViewModel {
             self.relationships.append(newRelationship)
             return true
         }else{
-            print("This edge is already created")
             return false
         }
     }
@@ -30,23 +29,31 @@ struct RelationshipViewModel {
     }
     
     public func getAllRelationships(){
-        print("-------All Edge Status-------")
+        print("-------All Relationships-------")
         for relationship in self.relationships{
-            print("Parent ID:", relationship.getStatus().srcWordModel?.getID() ?? "None")
-            print("Child ID:", relationship.getStatus().dstWordModel?.getID() ?? "None")
+            print("SRC ID:", relationship.getStatus().srcWordModel?.getID() ?? "None")
+            print("DST ID:", relationship.getStatus().dstWordModel?.getID() ?? "None")
         }
         print("--------------")
     }
     
-    public func searchTargetRelationships(containedWordModel:WordModel) -> [RelationshipModel]{
+    public func getRelatedRelationships(targetWordModel:WordModel) -> [RelationshipModel]{
         var result = [RelationshipModel]()
         for relationship in self.relationships{
-            if let unwrappedParentNode = relationship.getRelationshipPair().srcWordModel, unwrappedParentNode == containedWordModel{
+            if let scrWordModel = relationship.getRelationshipPair().srcWordModel, scrWordModel == targetWordModel{
                 result.append(relationship)
-            }else if let unwrappedChildNode = relationship.getRelationshipPair().dstWordModel, unwrappedChildNode == containedWordModel{
+            }else if let dstWordModel = relationship.getRelationshipPair().dstWordModel, dstWordModel == targetWordModel{
                 result.append(relationship)
             }
         }
         return result
+    }
+    
+    public func getSelectedRelationshipModel() -> RelationshipModel?{
+        var resultRelationshipModel:RelationshipModel?
+        for relationship in self.relationships where relationship.getIsSelectedStatus(){
+            resultRelationshipModel = relationship
+        }
+        return resultRelationshipModel
     }
 }

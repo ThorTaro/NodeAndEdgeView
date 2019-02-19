@@ -40,5 +40,6 @@ class MenuButton:UIButton{
         self.nameLabel.text = self.name
         self.nameLabel.textColor = .white
         self.addSubview(self.nameLabel)
+        self.showsTouchWhenHighlighted = true
     }
 }

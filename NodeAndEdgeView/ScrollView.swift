@@ -19,7 +19,7 @@ protocol WordControlDelegate:NSObjectProtocol{
 protocol RelationshipControlDelegate:NSObjectProtocol{
     func isRelationshipLooped(view:ScrollView, dst:WordModel) -> Bool
     func createRelationship(view:ScrollView, dst:WordModel)
-    func relationshipRemoved(view:ScrollView, targetRelationship:RelationshipModel)
+    func relationshipRemoved(view:ScrollView, targetRelationships:[RelationshipModel])
     func relationshipSelected(view:ScrollView, targetRelationship:RelationshipModel?)
 }
 
@@ -102,13 +102,9 @@ class ScrollView: UIScrollView{
             wordView.removeWordView()
             self.wordModelAndViewDict.removeValue(forKey: selectedWordModel)
         }
-        
-        if let wordDelegate = self.wordDelegate{
-            wordDelegate.wordRemoved(view: self, targetWord: selectedWordModel)
-        }
     }
     
-    public func deleteRelationshipViews(relationshipModels:[RelationshipModel]){
+    public func removeRelationshipViews(relationshipModels:[RelationshipModel]){
         for relationshipModel in relationshipModels{
             guard let relationshipView = self.relationshipModelAndViewDict[relationshipModel] else {
                 continue
@@ -116,7 +112,6 @@ class ScrollView: UIScrollView{
             relationshipView.removeRelationshipView()
             self.relationshipModelAndViewDict.removeValue(forKey: relationshipModel)
         }
-        
     }
     
     public func wordViewMoved(movedWordModel:WordModel, newPosition:CGPoint){
@@ -132,14 +127,6 @@ class ScrollView: UIScrollView{
         }
     }
     
-//    public func toggleWordSelectedMode(_ bool:Bool){
-//        if bool{
-//            self.mode = .wordSelected
-//        }else{
-//            self.mode = .normal
-//        }
-//    }
-    
     public func toggleWordViewState(targetWordModel:WordModel, isSelected:Bool){
         if let wordView = self.wordModelAndViewDict[targetWordModel]{
             wordView.toggleWordViewColor(isSelected: isSelected)
@@ -151,8 +138,6 @@ class ScrollView: UIScrollView{
             wordDelegate.wordSelected(view: self, selectedWord: nil)
         }
         
-        // TODO
-        // ここにRelationshipViewをLongPressしてたときにフォーカスを解除する方法を記述する(内容は上と多分変わらない)
         if let relationshipDelegate = self.relationshipDelegate, self.mode == .ralationshipSelected{
             relationshipDelegate.relationshipSelected(view: self, targetRelationship: nil)
         }
@@ -172,13 +157,6 @@ class ScrollView: UIScrollView{
         }
     }
     
-//    public func toggleRelationshipCreationMode(_ bool:Bool){
-//        if bool{
-//            self.mode = .relationshipCreation
-//        }else{
-//            self.mode = .normal
-//        }
-//    }
     public func changeModeType(mode:ModeType){
         self.mode = mode
     }
@@ -229,11 +207,6 @@ class ScrollView: UIScrollView{
         self.contentView.bringSubviewToFront(newWordView)
     }
     
-    public func relationshipViewTappedDelete(targetRelationship:RelationshipModel){ // まだ使われていない疑惑
-        if let relationshioDelegate = self.relationshipDelegate{
-            relationshioDelegate.relationshipRemoved(view: self, targetRelationship: targetRelationship)
-        }
-    }
 }
 
 extension ScrollView: UIScrollViewDelegate{

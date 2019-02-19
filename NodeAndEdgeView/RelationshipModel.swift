@@ -15,6 +15,7 @@ class RelationshipModel:Equatable, Hashable{
     
     private weak var scrWordModel:WordModel?
     private weak var dstWordModel:WordModel?
+    private var isSelected:Bool = false
     
     var hashValue:Int{
         return self.scrWordModel.hashValue ^ self.dstWordModel.hashValue
@@ -31,5 +32,13 @@ class RelationshipModel:Equatable, Hashable{
     
     public func getStatus() -> (srcWordModel:WordModel?,dstWordModel:WordModel?){
         return (self.scrWordModel, self.dstWordModel)
+    }
+    
+    public func toggleIsSelected(bool:Bool){
+        self.isSelected = bool
+    }
+    
+    public func getIsSelectedStatus() -> Bool{
+        return self.isSelected
     }
 }
