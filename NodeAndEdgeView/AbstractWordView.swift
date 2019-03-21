@@ -23,8 +23,8 @@ class AbstractWordView: UIView{
     }()
     
     public var previousPosition:CGPoint?
-    public var defaultViewWidth:CGFloat = 200.0
-    public var defaultViewHeight:CGFloat = 50.0
+    public var defaultViewWidth:CGFloat = 300.0
+    public var defaultViewHeight:CGFloat = 100.0
     public let maxViewWidth:CGFloat = 800.0
     public var currentViewWidth:CGFloat = 0.0
     public var currentText = String()

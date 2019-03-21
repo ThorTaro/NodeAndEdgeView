@@ -12,7 +12,7 @@ class ThemeWordView: AbstractWordView {
     required init(targetView: ScrollView, wordModel: WordModel, position: CGPoint) {
         super.init(targetView: targetView, wordModel: wordModel, position: position)
         self.defaultViewHeight = 150 // ***MAGIC NUMBER***
-        self.defaultViewWidth = 400
+        self.defaultViewWidth = 400 // ***MAGIC NUMBER***
         self.currentViewWidth = self.defaultViewWidth
     }
     
