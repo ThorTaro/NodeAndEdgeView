@@ -10,6 +10,7 @@
 		5011728921F6006C00F9DD82 /* RelationshipModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011728821F6006C00F9DD82 /* RelationshipModel.swift */; };
 		5011728B21F6027800F9DD82 /* RelationshipViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011728A21F6027800F9DD82 /* RelationshipViewModel.swift */; };
 		501E3BD521FF6D8F004616AF /* AbstractWordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E3BD421FF6D8F004616AF /* AbstractWordView.swift */; };
+		501FE5452243B7EE007B7D42 /* ヒラギノ角ゴシック W0.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 501FE5442243B7ED007B7D42 /* ヒラギノ角ゴシック W0.ttc */; };
 		503E17CB21F2323200DD5EBA /* WordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CA21F2323200DD5EBA /* WordViewModel.swift */; };
 		503E17CD21F2326400DD5EBA /* WordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CC21F2326400DD5EBA /* WordModel.swift */; };
 		503E17CF21F2327800DD5EBA /* WordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503E17CE21F2327800DD5EBA /* WordView.swift */; };
@@ -29,6 +30,7 @@
 		5011728821F6006C00F9DD82 /* RelationshipModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipModel.swift; sourceTree = "<group>"; };
 		5011728A21F6027800F9DD82 /* RelationshipViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipViewModel.swift; sourceTree = "<group>"; };
 		501E3BD421FF6D8F004616AF /* AbstractWordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractWordView.swift; sourceTree = "<group>"; };
+		501FE5442243B7ED007B7D42 /* ヒラギノ角ゴシック W0.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ヒラギノ角ゴシック W0.ttc"; sourceTree = "<group>"; };
 		503E17CA21F2323200DD5EBA /* WordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordViewModel.swift; sourceTree = "<group>"; };
 		503E17CC21F2326400DD5EBA /* WordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordModel.swift; sourceTree = "<group>"; };
 		503E17CE21F2327800DD5EBA /* WordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordView.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		506443D021F1BADA0081994F /* NodeAndEdgeView */ = {
 			isa = PBXGroup;
 			children = (
+				501FE5442243B7ED007B7D42 /* ヒラギノ角ゴシック W0.ttc */,
 				506443D121F1BADA0081994F /* AppDelegate.swift */,
 				506443D321F1BADA0081994F /* ViewController.swift */,
 				50F3EDF62213FBF600FE4CB2 /* MenuView.swift */,
@@ -155,6 +158,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				501FE5452243B7EE007B7D42 /* ヒラギノ角ゴシック W0.ttc in Resources */,
 				506443D921F1BADC0081994F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
