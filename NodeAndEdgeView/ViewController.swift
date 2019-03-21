@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     private func setMenu(){
         self.newMenuView = MenuView(frame: CGRect(x: self.view.bounds.width,
                                                      y: self.view.bounds.origin.y,
-                                                     width: self.view.bounds.width / 4,
+                                                     width: self.view.bounds.width / 10,
                                                      height: self.view.bounds.height / 2))
         self.newMenuView.setDelegate(delegate: self)
         self.view.addSubview(self.newMenuView)
