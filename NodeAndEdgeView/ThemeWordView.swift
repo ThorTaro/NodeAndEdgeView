@@ -11,7 +11,9 @@ import UIKit
 class ThemeWordView: AbstractWordView {
     required init(targetView: ScrollView, wordModel: WordModel, position: CGPoint) {
         super.init(targetView: targetView, wordModel: wordModel, position: position)
-        self.defaultViewHeight = 75
+        self.defaultViewHeight = 150 // ***MAGIC NUMBER***
+        self.defaultViewWidth = 400
+        self.currentViewWidth = self.defaultViewWidth
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -21,10 +23,11 @@ class ThemeWordView: AbstractWordView {
     override func createLayer() {
         self.skinPath.removeAllPoints()
         self.skinLayer.removeFromSuperlayer()
-        self.skinPath = UIBezierPath(ovalIn: CGRect(x: 0,
-                                                    y: 0,
-                                                    width: self.frame.width,
-                                                    height: self.frame.height))
+        self.skinPath = UIBezierPath(roundedRect: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: self.frame.width,
+                                                         height: self.frame.height),
+                                     cornerRadius: self.frame.height / 2)
         self.skinLayer.strokeColor = UIColor.magenta.cgColor
         self.skinLayer.fillColor = UIColor.magenta.cgColor
         self.skinLayer.borderWidth = 0
