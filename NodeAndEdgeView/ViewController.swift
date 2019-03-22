@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     private let scrollview = ScrollView()
     private var wordViewModel = WordViewModel()
     private var relationshipViewModel = RelationshipViewModel()
-    private var newMenuView = MenuView()
+    private var menuView = MenuView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +35,12 @@ class ViewController: UIViewController {
     }
     
     private func setMenu(){
-        self.newMenuView = MenuView(frame: CGRect(x: self.view.bounds.width,
-                                                     y: self.view.bounds.origin.y,
-                                                     width: self.view.bounds.width / 4,
+        self.menuView = MenuView(frame: CGRect(x: self.view.bounds.width,
+                                                     y: self.view.bounds.height / 4,
+                                                     width: self.view.bounds.width / 10,
                                                      height: self.view.bounds.height / 2))
-        self.newMenuView.setDelegate(delegate: self)
-        self.view.addSubview(self.newMenuView)
+        self.menuView.setDelegate(delegate: self)
+        self.view.addSubview(self.menuView)
     }
     
     private func setTheme(){
@@ -66,14 +66,14 @@ extension ViewController:WordControlDelegate{
     func wordSelected(view: ScrollView, selectedWord: WordModel?) {
         if let targetUnselectedWord = selectedWord{
             targetUnselectedWord.toggleIsSelected(bool: true)
-            self.newMenuView.changeMenuType(type: self.wordViewModel.getIsThemeWordStatus(targetWordModel: targetUnselectedWord) ? .Theme:.Word)
-            self.newMenuView.showMenu()
+            self.menuView.changeMenuType(type: self.wordViewModel.getIsThemeWordStatus(targetWordModel: targetUnselectedWord) ? .Theme:.Word)
+            self.menuView.showMenu()
             
             view.changeModeType(mode: .wordSelected)
         }else{
             if let targetSelectedWord = self.wordViewModel.getSelectedWordModel(){
                 targetSelectedWord.toggleIsSelected(bool: false)
-                self.newMenuView.hideMenu()
+                self.menuView.hideMenu()
                 view.changeModeType(mode: .normal)
                 view.toggleWordViewState(targetWordModel: targetSelectedWord, isSelected: false)
             }
@@ -125,12 +125,12 @@ extension ViewController:RelationshipControlDelegate{
         if let targetRelationship = targetRelationship{
             targetRelationship.toggleIsSelected(bool: true)
             view.changeModeType(mode: .ralationshipSelected)
-            self.newMenuView.changeMenuType(type: .Relationship)
-            self.newMenuView.showMenu()
+            self.menuView.changeMenuType(type: .Relationship)
+            self.menuView.showMenu()
         }else{
             if let selectedRelationshipModel = self.relationshipViewModel.getSelectedRelationshipModel(){
                 selectedRelationshipModel.toggleIsSelected(bool: false)
-                self.newMenuView.hideMenu()
+                self.menuView.hideMenu()
                 view.changeModeType(mode: .normal)
             }
         }
@@ -190,6 +190,6 @@ extension ViewController:NewMenuDelegate{
             print("ERROR: Theme word cannot be removed")
             return
         }
-        self.newMenuView.hideMenu()
+        self.menuView.hideMenu()
     }
 }

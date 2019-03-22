@@ -50,7 +50,7 @@ class MenuView:UIView{
                                        y: 0,
                                        width: self.frame.width,
                                        height: self.defaultMenuViewHeight/3)
-        self.editButton.setView(name: self.menuItems[0], icon: UIImage(named: "EditIcon")!)
+        self.editButton.setView(icon: UIImage(named: "EditIcon")!)
         self.addSubview(self.editButton)
         self.editButton.addTarget(self, action: #selector(editButtonDidTapped), for: .touchUpInside)
         
@@ -58,7 +58,7 @@ class MenuView:UIView{
                                                y: self.defaultMenuViewHeight/3,
                                                width: self.frame.width,
                                                height: self.defaultMenuViewHeight/3)
-        self.relationshipButton.setView(name: self.menuItems[1], icon: UIImage(named: "RelationshipIcon")!)
+        self.relationshipButton.setView(icon: UIImage(named: "RelationshipIcon")!)
         self.addSubview(self.relationshipButton)
         self.relationshipButton.addTarget(self, action: #selector(relationshipButtonDidTapped), for: .touchUpInside)
         
@@ -66,18 +66,20 @@ class MenuView:UIView{
                                          y: self.defaultMenuViewHeight/3 * 2,
                                          width: self.frame.width,
                                          height: self.defaultMenuViewHeight/3)
-        self.removeButton.setView(name: self.menuItems[2], icon: UIImage(named: "RemoveIcon")!)
+        self.removeButton.setView(icon: UIImage(named: "RemoveIcon")!)
         self.addSubview(self.removeButton)
         self.removeButton.addTarget(self, action: #selector(removeButtonDidTapped), for: .touchUpInside)
     }
     
     private func setView(){
-        self.backgroundColor = .clear
+        self.backgroundColor = MyColor.myLightBlue
+        self.layer.borderColor = MyColor.beige.cgColor
+        self.layer.borderWidth = 3.0
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = self.frame.width/8
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        blur.frame = self.bounds
-        self.addSubview(blur)
+        self.layer.cornerRadius = self.frame.width/4
+//        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+//        blur.frame = self.bounds
+//        self.addSubview(blur)
     }
     
     public func changeMenuType(type:MenuType){

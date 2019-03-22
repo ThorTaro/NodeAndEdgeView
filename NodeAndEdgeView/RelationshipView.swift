@@ -64,7 +64,7 @@ class RelationshipView:CAShapeLayer{
     }
     
     public func createLayer(){
-        self.fillColor = UIColor.lightGray.cgColor
+        self.fillColor = MyColor.beige.cgColor
         self.path = self.RelationshipPath.cgPath
     }
     

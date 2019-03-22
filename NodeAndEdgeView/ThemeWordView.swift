@@ -11,7 +11,10 @@ import UIKit
 class ThemeWordView: AbstractWordView {
     required init(targetView: ScrollView, wordModel: WordModel, position: CGPoint) {
         super.init(targetView: targetView, wordModel: wordModel, position: position)
-        self.defaultViewHeight = 75
+        self.defaultViewHeight = 150 // ***MAGIC NUMBER***
+        self.defaultViewWidth = 400 // ***MAGIC NUMBER***
+        self.currentViewWidth = self.defaultViewWidth
+        self.textLabel.textColor = MyColor.myBlue
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -21,13 +24,14 @@ class ThemeWordView: AbstractWordView {
     override func createLayer() {
         self.skinPath.removeAllPoints()
         self.skinLayer.removeFromSuperlayer()
-        self.skinPath = UIBezierPath(ovalIn: CGRect(x: 0,
-                                                    y: 0,
-                                                    width: self.frame.width,
-                                                    height: self.frame.height))
-        self.skinLayer.strokeColor = UIColor.magenta.cgColor
-        self.skinLayer.fillColor = UIColor.magenta.cgColor
-        self.skinLayer.borderWidth = 0
+        self.skinPath = UIBezierPath(roundedRect: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: self.frame.width,
+                                                         height: self.frame.height),
+                                     cornerRadius: self.frame.height / 2)
+        self.skinLayer.strokeColor = MyColor.myLightBlue.cgColor
+        self.skinLayer.fillColor = MyColor.beige.cgColor
+        self.skinLayer.lineWidth = 5.0
         self.skinLayer.path = self.skinPath.cgPath
         self.layer.addSublayer(self.skinLayer)
         self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: self.frame.origin)
@@ -35,11 +39,9 @@ class ThemeWordView: AbstractWordView {
     
     override func toggleWordViewColor(isSelected:Bool){
         if isSelected == true{
-            self.skinLayer.strokeColor = UIColor.yellow.cgColor
-            self.skinLayer.fillColor = UIColor.yellow.cgColor
+            self.skinLayer.strokeColor = UIColor.orange.cgColor
         }else{
-            self.skinLayer.strokeColor = UIColor.magenta.cgColor
-            self.skinLayer.fillColor = UIColor.magenta.cgColor
+            self.skinLayer.strokeColor = MyColor.myLightBlue.cgColor
         }
     }
     

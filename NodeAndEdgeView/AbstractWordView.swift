@@ -23,9 +23,9 @@ class AbstractWordView: UIView{
     }()
     
     public var previousPosition:CGPoint?
-    public var defaultViewWidth:CGFloat = 200.0
-    public var defaultViewHeight:CGFloat = 50.0
-    public let maxViewWidth:CGFloat = 800.0
+    public var defaultViewWidth:CGFloat = 300.0
+    public var defaultViewHeight:CGFloat = 100.0
+    public let maxViewWidth:CGFloat = 1000.0
     public var currentViewWidth:CGFloat = 0.0
     public var currentText = String()
     
@@ -37,6 +37,7 @@ class AbstractWordView: UIView{
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHandler))
         self.addGestureRecognizer(longPress)
         self.setNeedsLayout()
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -71,7 +72,7 @@ class AbstractWordView: UIView{
         self.createLayer()
         self.adjustInsideContentView(delta: self.errorOutsideContentView(createdViewFrame: self.frame))
         self.textLabel.frame = self.bounds
-        self.textLabel.font = UIFont.systemFont(ofSize: self.textLabel.frame.height / 2)
+        self.textLabel.font = UIFont(name: "HiraginoSans-W1", size: self.frame.height/2)
         self.addSubview(self.textLabel)
     }
     
@@ -158,6 +159,7 @@ extension String{
     public func getWidthOfString(usingFont font: UIFont) -> CGFloat{
         let attributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: attributes)
+        
         return size.width
     }
 }
