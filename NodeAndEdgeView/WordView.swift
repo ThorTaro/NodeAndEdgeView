@@ -13,6 +13,7 @@ class WordView: AbstractWordView {
         super.init(targetView: targetView, wordModel: wordModel, position: position)
         let pan = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
         self.addGestureRecognizer(pan)
+        self.textLabel.textColor = MyColor.beige
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -48,9 +49,9 @@ class WordView: AbstractWordView {
                                                          width: self.frame.width,
                                                          height: self.frame.height),
                                      cornerRadius: self.frame.height / 2)
-        self.skinLayer.strokeColor = UIColor.orange.cgColor
-        self.skinLayer.fillColor = UIColor.orange.cgColor
-        self.skinLayer.borderWidth = 0
+        self.skinLayer.strokeColor = MyColor.beige.cgColor
+        self.skinLayer.fillColor = MyColor.myLightBlue.cgColor
+        self.skinLayer.lineWidth = 3.0
         self.skinLayer.path = self.skinPath.cgPath
         self.layer.addSublayer(self.skinLayer)
         self.targetView.wordViewMoved(movedWordModel: self.wordModel, newPosition: self.frame.origin)
@@ -58,11 +59,9 @@ class WordView: AbstractWordView {
     
     override func toggleWordViewColor(isSelected:Bool){
         if isSelected == true{
-            self.skinLayer.strokeColor = UIColor.yellow.cgColor
-            self.skinLayer.fillColor = UIColor.yellow.cgColor
-        }else{
             self.skinLayer.strokeColor = UIColor.orange.cgColor
-            self.skinLayer.fillColor = UIColor.orange.cgColor
+        }else{
+            self.skinLayer.strokeColor = MyColor.beige.cgColor
         }
     }
 }
