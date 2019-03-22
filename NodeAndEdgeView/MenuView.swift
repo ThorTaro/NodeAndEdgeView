@@ -72,12 +72,14 @@ class MenuView:UIView{
     }
     
     private func setView(){
-        self.backgroundColor = .clear
+        self.backgroundColor = MyColor.myLightBlue
+        self.layer.borderColor = MyColor.beige.cgColor
+        self.layer.borderWidth = 3.0
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.width/4
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        blur.frame = self.bounds
-        self.addSubview(blur)
+//        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+//        blur.frame = self.bounds
+//        self.addSubview(blur)
     }
     
     public func changeMenuType(type:MenuType){
