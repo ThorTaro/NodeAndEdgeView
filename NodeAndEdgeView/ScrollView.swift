@@ -168,7 +168,7 @@ class ScrollView: UIScrollView{
     
     public func createRelationshipView(src:WordModel, dst:WordModel, newRelationshipModel:RelationshipModel){
         let newRelationshipView = RelationshipView(srcWordView: self.wordModelAndViewDict[src], dstWordView: self.wordModelAndViewDict[dst])
-        self.contentView.layer.insertSublayer(newRelationshipView, at: 1)
+        self.contentView.layer.insertSublayer(newRelationshipView, at: 0)
         self.relationshipModelAndViewDict[newRelationshipModel] = newRelationshipView
     }
     
