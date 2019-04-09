@@ -37,7 +37,7 @@ Here is the screenshot of this app.
 # Comments
 
 
-I set the value of the width and height roughly. So I think this code will be run better on iPhone6 or iPhoneXR (iPad is not supprted. Views will be displayed incorrectly).
+I set the value of the width and height roughly. So I think this code will be run better on iPhone6 or iPhoneXR (iPad is not supprted. Views will be displayed incorrectly) or XCode(ver.10.2).
 
 This app and this read me is made by ThorTaro.
 
